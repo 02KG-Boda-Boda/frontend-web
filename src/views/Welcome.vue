@@ -3,7 +3,7 @@
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down"  style="font-size:28px">O2G0 Bodaboda</span>
+        <span class="hidden-sm-and-down"  style="font-size:28px">2G0 Bodaboda</span>
       </v-toolbar-title>
       <v-spacer />
       <v-menu offset-y transition="scale-transition">
@@ -32,12 +32,12 @@
           active-class="dashboard-active"
           exact
         >
-          <v-list-item-icon style="font-size:18px">
+          <v-list-item-icon style="font-size:16px">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="font-size:18px">{{ item.title }}</v-list-item-title>
+            <v-list-item-title style="font-size:16px">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -64,7 +64,7 @@
     <v-footer class="font-weight-medium">
       <v-col class="text-center" cols="12">
         &copy; {{ new Date().getFullYear() }} —
-        <strong>02G0 Bodaboda</strong>
+        <strong>2G0 Bodaboda</strong>
       </v-col>
     </v-footer>
   </v-app>
@@ -87,17 +87,17 @@ export default {
         {
           title: "Agents",
           icon: "mdi-account-group",
-          path: "home.farmers"
+          path: "home.agents"
         },
         {
           title: "Bodabodas",
           icon: "mdi-motorbike",
-          path: "home.crop-destruction"
+          path: "home.bodabodas"
         },
         {
           title: "Payments",
           icon: "mdi-cash-multiple",
-          path: "home.loans"
+          path: "home.payments"
         }
       ]
     };
@@ -107,8 +107,8 @@ export default {
 </script>
 <style lang="scss">
 .dashboard-active {
-  background-color: #ffb74d;
-  color: #000 !important;
+  background-color: #2E7D32;
+  color: #FFF !important;
   font-weight: bold;
 }
 </style>
