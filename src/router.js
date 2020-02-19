@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Welcome from './views/Welcome.vue'
 import Dashboard from './components/Dashboard.vue'
-import Payments from './components/Payments.vue'
+import Loans from './components/Loans.vue'
 import Bodabodas from './components/Bodabodas.vue'
 import Agents from './components/Agents.vue'
 
@@ -34,9 +34,9 @@ const router = new Router({
                     component: Agents
                 },
                 {
-                    path: 'payments',
-                    name: 'home.payments',
-                    component: Payments
+                    path: 'loans',
+                    name: 'home.loans',
+                    component: Loans
                 },
                 {
                     path: 'bodabodas',

@@ -95,9 +95,9 @@ export default {
           path: "home.bodabodas"
         },
         {
-          title: "Payments",
+          title: "Loans",
           icon: "mdi-cash-multiple",
-          path: "home.payments"
+          path: "home.loans"
         }
       ]
     };
