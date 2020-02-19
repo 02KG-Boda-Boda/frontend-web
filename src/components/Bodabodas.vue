@@ -38,6 +38,73 @@
     }"
       ></v-data-table>
     </v-card>
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Add Agent</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="First name*" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Last Name*"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Phone Number*" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="NIN*" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Date of birth*"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Gurantor 1 NIN*" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Gurantor 2 NIN*" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload passport photo*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload LC1 Letter*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Riding Permit*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Application Form*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Gurantor 1 passportphot*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Gurantor 2 passport photo*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Address proof*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Gurantor 1 Stage Card*"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload Gurantor 2 Stage Card*"></v-file-input>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -45,6 +112,7 @@
 export default {
   data() {
     return {
+      dialog: false,
       items: [
         {
           text: "Home",
@@ -60,16 +128,16 @@ export default {
       search: "",
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "PASSPORT PHOTO",
           align: "left",
           sortable: false,
           value: "name"
         },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" }
+        { text: "FIRST NAME", value: "calories" },
+        { text: "LAST NAME", value: "fat" },
+        { text: "PHONE NUMBER", value: "carbs" },
+        { text: "NIN", value: "protein" },
+        { text: "DATE OF BIRTH", value: "iron" }
       ],
       desserts: [
         {

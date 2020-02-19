@@ -13,9 +13,9 @@
           <v-list-item>
             <v-icon color="teal lighten-2" size="120">mdi-account-group</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline">100</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px">100</v-list-item-title>
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px">Agents</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px;padding:5px">Agents</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -25,27 +25,27 @@
           <v-list-item>
             <v-icon color="lime darken-1" size="120">mdi-motorbike</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline">56</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px">56</v-list-item-title>
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px">Bodabodas</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px; padding:5px">Bodabodas</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mx-auto" max-width="300" to="/home/payments" outline>
+        <v-card class="mx-auto" max-width="300" to="/home/loans" outline>
           <v-list-item>
             <v-icon color="brown darken-2" size="120">mdi-cash-multiple</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline">89</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px">89</v-list-item-title>
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px">Payments</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px; padding:5px">Loans</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
     </v-row>
-    <p style="font-size:22px; padding-top:30px">Trend of paid and unpaid loans over time</p>
+    <p  class="headline text-center" style="font-size:22px; padding-top:30px">Trend of paid and unpaid loans over time</p>
     <v-row>
       <canvas id="myChart" width="1100" height="400"></canvas>
     </v-row>
@@ -105,7 +105,6 @@ export default {
 				responsive: true,
 				title: {
 					display: true,
-					text: 'Line Graph Showing the trends paid and unpaid loads'
 				},
 				tooltips: {
 					mode: 'index',
