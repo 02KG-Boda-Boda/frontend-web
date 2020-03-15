@@ -58,6 +58,7 @@
   </v-form>
 </template>
 <script>
+import { mapState } from "vuex";
 
 export default {
   name: "login-form",
@@ -82,13 +83,22 @@ export default {
     required: [field => !!field || "This field is required"]
   }),
   methods: {
-    login(){
-      this.$router.push('/home')
+    login() {
+      let email = this.email;
+      let password = this.password;
+      this.$store.dispatch("login", { email, password }).then(() => {
+        if (this.isLoggedIn) this.$router.push("/home");
+         else this.displayError = true;
+       
+      });
     }
   },
 
   updated() {
     if (this.email === "" || this.password === "") this.valid = false;
+  },
+  computed: {
+    ...mapState(["loginError", "isLoading", "isLoggedIn"])
   }
 };
 </script>

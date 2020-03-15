@@ -27,8 +27,10 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="agents"
         :search="search"
+        :loading="agentsLoading"
+        loading-text="Loading... Please wait"
         :footer-props="{
       showFirstLastPage: true,
       firstIcon: 'mdi-arrow-collapse-left',
@@ -36,7 +38,22 @@
       prevIcon: 'mdi-minus',
       nextIcon: 'mdi-plus'
     }"
-      ></v-data-table>
+      >
+        <template v-slot:item.photo="{ item }">
+          <div v-viewer="viewerOptions">
+            <img
+              :src="item.photo"
+              :data-href="item.photo"
+              style="width: 70px;height: 70px;border-radius: 50%;padding:5px;"
+              alt="john"
+            />
+          </div>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon color="red" @click="deleteAgent(item.id)">mdi-delete</v-icon>
+          <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
+        </template>
+      </v-data-table>
     </v-card>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
@@ -46,29 +63,26 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field label="First name*" required></v-text-field>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="First name*" v-model="firstname" required></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field label="Last Name*"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="Phone Number*"
-                  required
-                ></v-text-field>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="Last Name*" v-model="lastname"></v-text-field>
               </v-col>
               <v-col cols="12">
-                 <v-file-input show-size counter  label="Upload photo"></v-file-input>
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Email*" required></v-text-field>
+                <v-file-input show-size counter label="Upload photo" v-model="photo" type="file"></v-file-input>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="NIN*" required></v-text-field>
+                <v-text-field label="Email*" v-model="email" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Password*" type="password" required></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Password*" v-model="password" type="password" required></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -77,7 +91,47 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="addAgent">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="editDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit Agent</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="First name*" v-model="firstname" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="Last Name*" v-model="lastname"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload photo" v-model="photo" type="file"></v-file-input>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Email*" v-model="email" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Password*" v-model="password" type="password" required></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="editDialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="editAgent">edit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -85,20 +139,46 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import "viewerjs/dist/viewer.css";
+import Swal from "sweetalert2";
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000
+});
+
+
 export default {
   data() {
     return {
+      editDialog: false,
+      viewerOptions: {
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        url: "data-href"
+      },
+      firstname: "",
+      lastname: "",
+      phoneNumber: "",
+      nin: "",
+      email: "",
+      password: "",
+      id: "",
+      photo: null,
       dialog: false,
       items: [
         {
           text: "Home",
           disabled: false,
-          href: "breadcrumbs_dashboard"
+          href: "home"
         },
         {
           text: "Agents",
           disabled: true,
-          href: "breadcrumbs_link_1"
+          href: "home/agents"
         }
       ],
       search: "",
@@ -107,97 +187,145 @@ export default {
           text: "PHOTO",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "photo"
         },
-        { text: "FIRST NAME", value: "calories" },
-        { text: "LAST NAME", value: "fat" },
-        { text: "PHONE NUMBER", value: "carbs" },
-        { text: "EMAIL", value: "protein" },
-        { text: "NIN", value: "iron" }
-      ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%"
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%"
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%"
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%"
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%"
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%"
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%"
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%"
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%"
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%"
-        }
+        { text: "FIRST NAME", value: "firstName" },
+        { text: "LAST NAME", value: "lastName" },
+        { text: "PHONE NUMBER", value: "phoneNumber" },
+        { text: "EMAIL", value: "email" },
+        { text: "NIN", value: "nin" },
+        { text: "ACTIONS", value: "actions" }
       ]
     };
+  },
+  methods: {
+    launchEdit(id) {
+      this.editDialog = true;
+      let agent = this.$store.getters.getAgentById(id);
+      this.firstname = agent.firstName;
+      this.lastname = agent.lastName;
+      this.email = agent.email;
+      this.phoneNumber = agent.phoneNumber;
+      this.nin = agent.nin;
+      this.id = agent.id;
+    },
+    setNull() {
+      this.firstname = "";
+      this.lastname = "";
+      this.nin = "";
+      this.photo = null;
+      this.email = "";
+      this.phoneNumber = "";
+      this.password = "";
+    },
+    deleteAgent(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        client: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then(result => {
+        if (result.value) {
+          this.$store
+            .dispatch("deleteAgents", id)
+            .then(() => {
+              if (this.deleteAgentStatus) {
+                Swal.fire(
+                  "Deleted!",
+                  "Agent has been deleted.",
+                  "success"
+                );
+                this.$store.dispatch("fetchAgents");
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      });
+    },
+    addAgent() {
+      let data = {
+        firstName: this.firstname,
+        lastName: this.lastname,
+        nin: this.nin,
+        phoneNumber: this.phoneNumber,
+        password: this.password,
+        email: this.email,
+        role: "agent"
+      };
+      var formData = new FormData();
+      formData.append("photo", this.photo);
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("nin", data.nin);
+      formData.append("password", data.password);
+      formData.append("email", data.email);
+      formData.append("phoneNumber", data.phoneNumber);
+      formData.append("role", data.role);
+      this.$store.dispatch("addAgent", formData).then(() => {
+        if (this.isAgentPosted) {
+           Toast.fire({
+            icon: "success",
+            title: "Agent successfully added"
+          });
+          this.$store.dispatch("fetchAgents");
+          this.dialog = false;
+          this.setNull();
+        }
+      });
+    },
+    editAgent() {
+      let data = {
+        firstName: this.firstname,
+        lastName: this.lastname,
+        nin: this.nin,
+        phoneNumber: this.phoneNumber,
+        password: this.password,
+        email: this.email,
+        role: "agent"
+      };
+      let id = this.id;
+      var formData = new FormData();
+      if (this.photo != null) {
+        formData.append("photo", this.photo);
+      }
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("nin", data.nin);
+      formData.append("password", data.password);
+      formData.append("email", data.email);
+      formData.append("phoneNumber", data.phoneNumber);
+      formData.append("role", data.role);
+      this.$store.dispatch("updateAgents", { id, formData }).then(() => {
+        if (this.updateAgentStatus) {
+           Toast.fire({
+            icon: "success",
+            title: "Agent successfully updated"
+          });
+          this.$store.dispatch("fetchAgents");
+          this.editDialog = false;
+          this.setNull();
+        }
+      });
+    }
+  },
+
+  created() {
+    this.$store.dispatch("fetchAgents");
+  },
+  computed: {
+    ...mapState([
+      "postAgentLoading",
+      "isAgentPosted",
+      "agents",
+      "agentsLoading",
+      "deleteAgentStatus",
+      "updateAgentStatus"
+    ])
   }
 };
 </script>
