@@ -8,46 +8,92 @@
       </v-breadcrumbs>
     </v-row>
     <v-row justify="space-between">
-      <v-col cols="12" sm="6" md="4">
-        <v-card class="mx-auto" max-width="300" max-height="150" to="/home/agents" outline>
+      <v-col cols="12" sm="6" md="3">
+        <v-card
+          class="mx-auto"
+          max-width="300"
+          max-height="150"
+          to="/home/agents"
+          outline
+        >
           <v-list-item>
             <v-icon color="teal lighten-2" size="120">mdi-account-group</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline" style="padding:5px">100</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px"
+                ><h5>100</h5></v-list-item-title
+              >
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px;padding:5px">Agents</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px;padding:5px"
+                >Employees</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="3">
+        <v-card
+          class="mx-auto"
+          max-width="300"
+          max-height="150"
+          to="/home/agents"
+          outline
+        >
+          <v-list-item>
+            <v-icon color="orange darken-4" size="120"
+              >mdi-cash-register</v-icon
+            >
+            <v-list-item-content>
+              <v-list-item-title class="headline" style="padding:5px"
+                ><h5>23</h5></v-list-item-title
+              >
+              <v-divider style="padding:5px"></v-divider>
+              <v-list-item-subtitle style="font-size:16px;padding:5px"
+                >Saving Accounts</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="3">
         <v-card class="mx-auto" max-width="300" to="/home/bodabodas" outline>
           <v-list-item>
             <v-icon color="lime darken-1" size="120">mdi-motorbike</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline" style="padding:5px">56</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px"
+                ><h5>56</h5></v-list-item-title
+              >
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px; padding:5px">Bodabodas</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px; padding:5px"
+                >Members</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="3">
         <v-card class="mx-auto" max-width="300" to="/home/loans" outline>
           <v-list-item>
             <v-icon color="brown darken-2" size="120">mdi-cash-multiple</v-icon>
             <v-list-item-content>
-              <v-list-item-title class="headline" style="padding:5px">89</v-list-item-title>
+              <v-list-item-title class="headline" style="padding:5px"
+                ><h5>89</h5></v-list-item-title
+              >
               <v-divider></v-divider>
-              <v-list-item-subtitle style="font-size:16px; padding:5px">Loans</v-list-item-subtitle>
+              <v-list-item-subtitle style="font-size:16px; padding:5px"
+                >Loans</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
     </v-row>
-    <p  class="headline text-center" style="font-size:22px; padding-top:30px">Trend of paid and unpaid loans over time</p>
     <v-row>
-      <canvas id="myChart" width="1100" height="400"></canvas>
+      <v-col cols="12" sm="6" md="12">
+        <h5 class="text-center">
+          Trend of paid and unpaid loans over time
+        </h5>
+        <canvas id="myChart" width="1100" height="400"></canvas>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -102,35 +148,35 @@ export default {
           ]
         },
         options: {
-				responsive: true,
-				title: {
-					display: true,
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					x: {
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					},
-					y: {
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}
-				}
-			}
+          responsive: true,
+          title: {
+            display: true
+          },
+          tooltips: {
+            mode: "index",
+            intersect: false
+          },
+          hover: {
+            mode: "nearest",
+            intersect: true
+          },
+          scales: {
+            x: {
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: "Month"
+              }
+            },
+            y: {
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: "Value"
+              }
+            }
+          }
+        }
       });
       window.mygraph = myChart;
     }

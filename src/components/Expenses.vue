@@ -13,13 +13,13 @@
         color="success"
         style="text-transform:capitalize"
       >
-        add members
+        add Expense
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
     </v-layout>
     <v-card>
       <v-card-title>
-        Members
+        Expenses
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -31,8 +31,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="members"
-        :loading="membersLoading"
+        :items="expenses"
         :search="search"
         :footer-props="{
           showFirstLastPage: true,
@@ -42,15 +41,8 @@
           nextIcon: 'mdi-plus'
         }"
       >
-        <template v-slot:item.photo="{ item }">
-          <div v-viewer="viewerOptions">
-            <img
-              :src="`${url}${item.photo}`"
-              :data-href="`${url}${item.photo}`"
-              style="width: 70px;height: 70px;border-radius: 50%;padding:5px;"
-              alt="john"
-            />
-          </div>
+        <template v-slot:item.createdAt="{ item }">
+          <h5>{{ item.createdAt | myDate }}</h5>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
@@ -60,45 +52,31 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Add Member</h5>
+          <h5>Add Expense</h5>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="6">
+              <v-col cols="12">
                 <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
+                  label="Expense title*"
+                  v-model="title"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  v-model="photo"
-                  label="Upload passport photo*"
-                ></v-file-input>
+                <v-text-field
+                  label="Expense amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Expense note*"
+                  v-model="note"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -112,8 +90,8 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="postMember"
-            :loading="postMemberLoading"
+            @click="postExpense"
+            :loading="postExpenseLoading"
             >Save</v-btn
           >
         </v-card-actions>
@@ -122,45 +100,31 @@
     <v-dialog v-model="editDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Edit Member</h5>
+          <h5>Edit Expense</h5>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="6">
+              <v-col cols="12">
                 <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
+                  label="Expense title*"
+                  v-model="title"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  v-model="photo"
-                  label="Upload passport photo*"
-                ></v-file-input>
+                <v-text-field
+                  label="Expense amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Expense note*"
+                  v-model="note"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -174,9 +138,9 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="updateMember"
-            :loading="updateMemberLoading"
-            >Save</v-btn
+            @click="updateExpense"
+            :loading="updateExpenseLoading"
+            >Edit</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -197,21 +161,15 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   }
 });
-
 import { mapState } from "vuex";
-import "viewerjs/dist/viewer.css";
 export default {
   data() {
     return {
-      url: process.env.VUE_APP_API_URL,
       dialog: false,
+      title: "",
       editDialog: false,
-      photo: null,
-      firstName: "",
-      lastName: "",
-      nin: "",
-      phoneNumber: "",
-      id: "",
+      note: "",
+      amount: "",
       items: [
         {
           text: "Home",
@@ -219,7 +177,7 @@ export default {
           href: "breadcrumbs_dashboard"
         },
         {
-          text: "Members",
+          text: "Expense",
           disabled: true,
           href: "breadcrumbs_link_1"
         }
@@ -227,54 +185,51 @@ export default {
       search: "",
       headers: [
         {
-          text: "PHOTO",
+          text: "DATE ISSUED",
+          align: "left",
+          value: "createdAt"
+        },
+        {
+          text: "TITLE",
           align: "left",
           sortable: false,
-          value: "photo"
+          value: "title"
         },
-        { text: "MEMBER NAME", value: "name" },
-        { text: "REGISTERED BY", value: "registered_by" },
-        { text: "PHONE NUMBER", value: "phoneNumber" },
-        { text: "NIN", value: "nin" },
+        { text: "AMOUNT", value: "amount" },
+        { text: "NOTE", value: "note" },
         { text: "ACTIONS", value: "actions" }
       ]
     };
   },
   methods: {
+    setNull() {
+      this.title = "";
+      this.amount = "";
+    },
     launchEdit(id) {
       this.editDialog = true;
-      let user = this.$store.getters.getMemberById(id);
-      this.lastName = user.lastName;
-      this.firstName = user.firstName;
-      this.phoneNumber = user.phoneNumber;
-      this.nin = user.nin;
-      this.id = id;
+      let expense = this.$store.getters.getExpenseById(id);
+      this.title = expense.title;
+      this.amount = expense.amount;
+      this.note = expense.note;
+      this.id = expense.id;
     },
-    setNull() {
-      this.firstName = "";
-      this.lastName = "";
-      this.photo = "";
-      this.phoneNumber = "";
-      this.nin = "";
-    },
-    postMember() {
-      let data = new FormData();
-      data.append("firstName", this.firstName);
-      data.append("lastName", this.lastName);
-      data.append("passport_photo", this.photo);
-      data.append("phoneNumber", this.phoneNumber);
-      data.append("nin", this.nin);
-
+    postExpense() {
+      let data = {
+        title: this.title,
+        amount: this.amount,
+        note: this.note
+      };
       this.$store
-        .dispatch("postMember", data)
+        .dispatch("postExpense", data)
         .then(() => {
-          if (this.postMemberStatus) {
+          if (this.postExpenseStatus) {
             this.dialog = false;
             this.setNull();
-            this.$store.dispatch("fetchMembers");
+            this.$store.dispatch("fetchExpenses");
             Toast.fire({
               icon: "success",
-              title: "Member account created successfully"
+              title: "Expense Saved successfully"
             });
           } else {
             Toast.fire({
@@ -287,31 +242,28 @@ export default {
           console.log(err);
         });
     },
-    updateMember() {
-      let data = new FormData();
-      data.append("firstName", this.firstName);
-      data.append("lastName", this.lastName);
-      data.append("passport_photo", this.photo);
-      data.append("phoneNumber", this.phoneNumber);
-      data.append("nin", this.nin);
-      data.append("id", this.id);
-      const id = this.id;
-
+    updateExpense() {
+      let data = {
+        title: this.title,
+        amount: this.amount,
+        note: this.note,
+        id: this.id
+      };
       this.$store
-        .dispatch("updateMember", { data, id })
+        .dispatch("updateExpense", data)
         .then(() => {
-          if (this.updateMemberStatus) {
+          if (this.updateExpenseStatus) {
             this.editDialog = false;
             this.setNull();
-            this.$store.dispatch("fetchMembers");
+            this.$store.dispatch("fetchExpenses");
             Toast.fire({
               icon: "success",
-              title: "Member account created updated"
+              title: "Expenses sucessfully edited"
             });
           } else {
             Toast.fire({
               icon: "error",
-              title: "Something went wrong"
+              title: "Form validation failed"
             });
           }
         })
@@ -321,17 +273,16 @@ export default {
     }
   },
   beforeCreate() {
-    this.$store.dispatch("fetchMembers");
+    this.$store.dispatch("fetchExpenses");
   },
   computed: {
     ...mapState([
-      "postMemberError",
-      "postMemberLoading",
-      "postMemberStatus",
-      "members",
-      "membersLoading",
-      "updateMemberLoading",
-      "updateMemberStatus"
+      "postExpenseStatus",
+      "postExpenseLoading",
+      "expenses",
+      "expensesLoading",
+      "updateExpenseStatus",
+      "updateExpenseLoading"
     ])
   }
 };

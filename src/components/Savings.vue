@@ -13,13 +13,13 @@
         color="success"
         style="text-transform:capitalize"
       >
-        register loan
+        add saving
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
     </v-layout>
     <v-card>
       <v-card-title>
-        Loans
+        Savings
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -31,9 +31,8 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="loans"
+        :items="savings"
         :search="search"
-        :loading="loansLoading"
         :footer-props="{
           showFirstLastPage: true,
           firstIcon: 'mdi-arrow-collapse-left',
@@ -48,24 +47,12 @@
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
         </template>
-        <template v-slot:item.status="{ item }">
-          <v-chip
-            class="ma-2"
-            color="green"
-            text-color="white"
-            v-if="item.status == 'paid'"
-            >{{ item.status }}</v-chip
-          >
-          <v-chip class="ma-2" color="red" text-color="white" v-else>{{
-            item.status
-          }}</v-chip>
-        </template>
       </v-data-table>
     </v-card>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Register Loan</h5>
+          <h5>Save Money</h5>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -82,13 +69,6 @@
                 <v-text-field
                   label="Loan amount*"
                   v-model="amount"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Loan period*"
-                  v-model="period"
                   required
                 ></v-text-field>
               </v-col>
@@ -104,8 +84,8 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="postLoan"
-            :loading="postLoanLoading"
+            @click="postSaving"
+            :loading="postSavingLoading"
             >Save</v-btn
           >
         </v-card-actions>
@@ -114,7 +94,7 @@
     <v-dialog v-model="editDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Edit Loan</h5>
+          <h5>Edit Saving</h5>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -134,13 +114,6 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Loan period*"
-                  v-model="period"
-                  required
-                ></v-text-field>
-              </v-col>
             </v-row>
           </v-container>
           <small>*indicates required field</small>
@@ -153,8 +126,8 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="updateLoan"
-            :loading="updateLoanLoading"
+            @click="updateSaving"
+            :loading="updateSavingLoading"
             >Edit</v-btn
           >
         </v-card-actions>
@@ -181,9 +154,10 @@ export default {
   data() {
     return {
       dialog: false,
+      member: "",
       editDialog: false,
-      period: "",
-      memeber: "",
+      menu: false,
+      modal: false,
       amount: "",
       items: [
         {
@@ -192,7 +166,7 @@ export default {
           href: "breadcrumbs_dashboard"
         },
         {
-          text: "Loans",
+          text: "Savings",
           disabled: true,
           href: "breadcrumbs_link_1"
         }
@@ -211,44 +185,40 @@ export default {
           value: "member"
         },
         { text: "ISSUED BY", value: "issued_by" },
-        { text: "LOAN AMOUNT", value: "amount" },
-        { text: "LOAN PERIOD", value: "payment_period" },
+        { text: "AMOUNT", value: "amount" },
         { text: "ACTIONS", value: "actions" }
       ]
     };
   },
   methods: {
-    launchEdit(id) {
-      this.editDialog = true;
-      let loan = this.$store.getters.getLoanById(id);
-      this.member = loan.member;
-      this.amount = loan.amount;
-      this.period = loan.payment_period;
-      this.id = id;
-    },
     setNull() {
       this.member = "";
       this.amount = "";
-      this.period = "";
     },
-    postLoan() {
+    launchEdit(id) {
+      this.editDialog = true;
+      let saving = this.$store.getters.getSavingById(id);
+      this.member = saving.member;
+      this.amount = saving.amount;
+      this.id = id;
+    },
+    postSaving() {
       let member = this.$store.getters.getMemberByName(this.member);
 
       let data = {
         memberId: member.id,
-        amount: this.amount,
-        payment_period: this.period
+        amount: this.amount
       };
       this.$store
-        .dispatch("postLoan", data)
+        .dispatch("postSavings", data)
         .then(() => {
-          if (this.postLoanStatus) {
+          if (this.postSavingStatus) {
             this.dialog = false;
             this.setNull();
-            this.$store.dispatch("fetchLoans");
+            this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Loan registered successfully"
+              title: "Amount Saved successfully"
             });
           } else {
             Toast.fire({
@@ -261,25 +231,24 @@ export default {
           console.log(err);
         });
     },
-    updateLoan() {
+    updateSaving() {
       let member = this.$store.getters.getMemberByName(this.member);
 
       let data = {
         memberId: member.id,
         amount: this.amount,
-        payment_period: this.period,
         id: this.id
       };
       this.$store
-        .dispatch("updateLoan", data)
+        .dispatch("updateSaving", data)
         .then(() => {
-          if (this.updateLoanStatus) {
+          if (this.updateSavingStatus) {
             this.editDialog = false;
             this.setNull();
-            this.$store.dispatch("fetchLoans");
+            this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Loan suceessfully edited"
+              title: "Saving sucessfully edited"
             });
           } else {
             Toast.fire({
@@ -294,16 +263,16 @@ export default {
     }
   },
   beforeCreate() {
-    this.$store.dispatch("fetchLoans");
+    this.$store.dispatch("fetchSavings");
   },
   computed: {
     ...mapState([
-      "postLoanStatus",
-      "postLoanLoading",
-      "loans",
-      "loansLoading",
-      "updateLoanStatus",
-      "updateLoanLoading"
+      "postSavingStatus",
+      "postSavingLoading",
+      "savings",
+      "savingsLoading",
+      "updateSavingStatus",
+      "updateSavingLoading"
     ]),
     ...mapGetters(["getMembersNames"])
   }

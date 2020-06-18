@@ -11,7 +11,8 @@
       dismissible
       type="error"
       transition="scroll-y-transition"
-    >Invalid phone number or password</v-alert>
+      >Invalid phone number or password</v-alert
+    >
     <v-text-field
       id="login-email-field"
       class="headline mb-6"
@@ -58,6 +59,7 @@
   </v-form>
 </template>
 <script>
+import { mapState } from "vuex";
 
 export default {
   name: "login-form",
@@ -82,9 +84,27 @@ export default {
     required: [field => !!field || "This field is required"]
   }),
   methods: {
-    login(){
-      this.$router.push('/home')
+    login() {
+      let data = {
+        email: this.email,
+        password: this.password
+      };
+      this.$store
+        .dispatch("login", data)
+        .then(() => {
+          if (this.isLoggedIn == true) {
+            this.$router.replace("/home");
+          } else {
+            this.displayError = true;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  },
+  computed: {
+    ...mapState(["loginError", "isLoading", "isLoggedIn"])
   },
 
   updated() {
