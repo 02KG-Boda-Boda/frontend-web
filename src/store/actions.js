@@ -34,6 +34,15 @@ export const actions = {
         commit("SIGNUP_ERROR", err.response);
       });
   },
+  logout({ commit }) {
+    return new Promise(resolve => {
+      commit("LOGOUT");
+      localStorage.removeItem("token");
+      window.localStorage.clear();
+      delete axios.defaults.headers.common["Authorization"];
+      resolve();
+    });
+  },
   async fetchUsers({ commit }) {
     commit("FETCH_USERS_LOADING", true);
     await axiosInstance
@@ -238,5 +247,5 @@ export const actions = {
         commit("UPDATE_EXPENSE_STATUS", false);
         commit("UPDATE_EXPENSE_ERROR", err.response);
       });
-  },
+  }
 };

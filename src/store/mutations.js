@@ -11,6 +11,10 @@ export const mutations = {
     state.loginError = payload;
     state.isLoggedIn = false;
   },
+  LOGOUT(state) {
+    state.isLoggedIn = false;
+    state.token = "";
+  },
   SIGNUP_STATUS(state, payload) {
     state.isSignedUp = payload;
   },
@@ -145,5 +149,5 @@ export const mutations = {
   },
   UPDATE_EXPENSE_ERROR(state, payload) {
     state.updateExpenseError = payload;
-  },
+  }
 };

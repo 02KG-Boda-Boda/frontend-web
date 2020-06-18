@@ -85,22 +85,14 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  label="Upload photo"
-                  v-model="photo"
-                ></v-file-input>
-              </v-col>
-              <v-col cols="12">
+              <v-col cols="12" sm="6" md="6"> 
                 <v-text-field
                   label="Email*"
                   v-model="email"
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="NIN*"
                   v-model="nin"
@@ -113,6 +105,14 @@
                   :items="roles"
                   v-model="role"
                 ></v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input
+                  show-size
+                  counter
+                  label="Upload photo"
+                  v-model="photo"
+                ></v-file-input>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -169,22 +169,14 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  label="Upload photo"
-                  v-model="photo"
-                ></v-file-input>
-              </v-col>
-              <v-col cols="12">
+              <v-col cols="12" sm="6" md="6"> 
                 <v-text-field
                   label="Email*"
                   v-model="email"
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="NIN*"
                   v-model="nin"
@@ -197,6 +189,14 @@
                   :items="roles"
                   v-model="role"
                 ></v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input
+                  show-size
+                  counter
+                  label="Upload photo"
+                  v-model="photo"
+                ></v-file-input>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -264,7 +264,7 @@ export default {
       photo: null,
       email: "",
       role: "",
-      roles: ["agents", "administrator"],
+      roles: ["agent", "administrator"],
       items: [
         {
           text: "Home",

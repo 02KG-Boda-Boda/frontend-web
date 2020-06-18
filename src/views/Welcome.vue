@@ -9,12 +9,19 @@
       <v-menu offset-y transition="scale-transition">
         <template v-slot:activator="{ on }">
           <p v-on="on">
-            Wamozo Cosmas
+            <v-avatar>
+              <img
+                style="padding:5px"
+                :src="`${url}${user.photo}`"
+                alt="John"
+              />
+            </v-avatar>
+            {{ user.firstName }} {{ user.lastName }}
             <v-icon>mdi-chevron-down</v-icon>
           </p>
         </template>
         <v-list>
-          <v-list-item>
+          <v-list-item @click="logout">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
@@ -81,11 +88,13 @@
 
 <script>
 import moment from "moment";
+import { mapState } from "vuex";
 import Logo from "@/assets/logo.png";
 export default {
   name: "toolbar",
   data() {
     return {
+      url: process.env.VUE_APP_API_URL,
       drawer: null,
       day: moment().format("dddd"),
       date: moment().format("MMM Do YY"),
@@ -121,7 +130,25 @@ export default {
       ]
     };
   },
-  computed: {}
+  methods: {
+    logout() {
+      this.$store
+        .dispatch("logout")
+        .then(() => {
+          if (this.isLoggedIn == false) {
+            this.$router.replace("/");
+          } else {
+            console.log("error");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  computed: {
+    ...mapState(["isLoggedIn", "user"])
+  }
 };
 </script>
 <style lang="scss">

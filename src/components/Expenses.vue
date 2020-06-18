@@ -185,7 +185,7 @@ export default {
       search: "",
       headers: [
         {
-          text: "DATE ISSUED",
+          text: "DATE",
           align: "left",
           value: "createdAt"
         },
