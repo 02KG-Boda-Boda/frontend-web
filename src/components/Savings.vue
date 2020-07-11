@@ -13,13 +13,13 @@
         color="success"
         style="text-transform:capitalize"
       >
-        add saving
+        add saving Account
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
     </v-layout>
     <v-card>
       <v-card-title>
-        Savings
+        Savings Accounts
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -32,6 +32,7 @@
       <v-data-table
         :headers="headers"
         :items="savings"
+        :loading="savingsLoading"
         :search="search"
         :footer-props="{
           showFirstLastPage: true,
@@ -44,36 +45,58 @@
         <template v-slot:item.date_issued="{ item }">
           <h5>{{ item.date_issued | myDate }}</h5>
         </template>
+        <template v-slot:item.interest="{ item }">
+          <span>{{ item.interest }}</span>
+        </template>
+         <template v-slot:item.id="{ item }">
+          <span>2G0{{ item.id }}</span>
+        </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
+          <v-icon color="green" @click="launchCredit(item.id)"
+            >mdi-cash-plus</v-icon
+          >
+          <v-icon color="green" @click="launchDebit(item.id)"
+            >mdi-cash-minus</v-icon
+          >
         </template>
       </v-data-table>
     </v-card>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Save Money</h5>
+          <h5>Create Saving Account</h5>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="member"
                   :items="getMembersNames"
+                  :rules="memberRules"
                   dense
                   label="Choose member"
                 ></v-autocomplete>
               </v-col>
+              <v-col class="d-flex" cols="12">
+                <v-autocomplete
+                  label="Select Account Type"
+                  :items="types"
+                  :rules="typeRules"
+                  v-model="type"
+                ></v-autocomplete>
+              </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Loan amount*"
+                  label="Saving amount*"
                   v-model="amount"
+                  :rules="amountRules"
                   required
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-container>
+          </v-form>
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
@@ -84,6 +107,7 @@
           <v-btn
             color="blue darken-1"
             text
+            :disabled="!valid"
             @click="postSaving"
             :loading="postSavingLoading"
             >Save</v-btn
@@ -94,10 +118,10 @@
     <v-dialog v-model="editDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Edit Saving</h5>
+          <h5>Edit Saving Account</h5>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12">
                 <v-autocomplete
@@ -107,9 +131,50 @@
                   label="Choose member"
                 ></v-autocomplete>
               </v-col>
+              <v-col class="d-flex" cols="12">
+                <v-autocomplete
+                  label="Select Account Type"
+                  :items="types"
+                  v-model="type"
+                  :rules="typeRules"
+                ></v-autocomplete>
+              </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Loan amount*"
+                  label="Saving amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
+          <v-btn
+            :disabled="!valid"
+            color="blue darken-1"
+            text
+            @click="updateSaving"
+            :loading="updateSavingLoading"
+            >Edit</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="creditDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <h5>Credit Account</h5>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="Saving amount*"
                   v-model="amount"
                   required
                 ></v-text-field>
@@ -120,15 +185,45 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="editDialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="updateSaving"
-            :loading="updateSavingLoading"
-            >Edit</v-btn
+            @click="creditAccount"
+            :loading="postSavingLoading"
+            >Credit</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="debitDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <h5>Debit Account</h5>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="Saving amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="debitSaving"
+            :loading="debitSavingLoading"
+            >Debit</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -153,12 +248,17 @@ import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      valid: false,
       dialog: false,
       member: "",
       editDialog: false,
-      menu: false,
-      modal: false,
-      amount: "",
+      debitDialog: false,
+      creditDialog: false,
+      types: ["investments", "fixed", "ordinary"],
+      type: "",
+      memberRules: [v => !!v || "Member is required"],
+      typeRules: [v => !!v || "Account Type is required"],
+      amountRules: [v => !!v || "Amount is required"],
       items: [
         {
           text: "Home",
@@ -179,13 +279,20 @@ export default {
           value: "date_issued"
         },
         {
+          text: "ACCOUNT NUMBER",
+          align: "left",
+          sortable: false,
+          value: "id"
+        },
+        {
           text: "MEMBER NAME",
           align: "left",
           sortable: false,
           value: "member"
         },
         { text: "ISSUED BY", value: "issued_by" },
-        { text: "AMOUNT", value: "amount" },
+        { text: "ACCOUNT TYPE", value: "account_type" },
+        { text: "AMOUNT(Ugx)", value: "amount" },
         { text: "ACTIONS", value: "actions" }
       ]
     };
@@ -194,25 +301,51 @@ export default {
     setNull() {
       this.member = "";
       this.amount = "";
+      this.type = "";
+      this.id = "";
+      this.editDialog = false;
+      this.creditDialog = false;
+      this.debitDialog = false;
     },
     launchEdit(id) {
       this.editDialog = true;
       let saving = this.$store.getters.getSavingById(id);
       this.member = saving.member;
       this.amount = saving.amount;
+      this.type = saving.account_type;
+      this.id = id;
+    },
+    launchCredit(id) {
+      this.creditDialog = true;
+      let saving = this.$store.getters.getSavingById(id);
+      this.member = saving.member;
+      this.id = id;
+    },
+    launchDebit(id) {
+      this.debitDialog = true;
+      let saving = this.$store.getters.getSavingById(id);
+      this.member = saving.member;
       this.id = id;
     },
     postSaving() {
       let member = this.$store.getters.getMemberByName(this.member);
+      let transaction = {
+        memberId: member.id,
+        amount: this.amount,
+        type: "Savings Account Creation"
+      };
 
       let data = {
         memberId: member.id,
-        amount: this.amount
+        amount: this.amount,
+        account_type: this.type,
+        phoneNumber: member.phoneNumber
       };
       this.$store
         .dispatch("postSavings", data)
         .then(() => {
           if (this.postSavingStatus) {
+            this.$store.dispatch("postTransaction", transaction);
             this.dialog = false;
             this.setNull();
             this.$store.dispatch("fetchSavings");
@@ -231,12 +364,85 @@ export default {
           console.log(err);
         });
     },
+    debitSaving() {
+      let member = this.$store.getters.getMemberByName(this.member);
+      let transaction = {
+        memberId: member.id,
+        amount: this.amount,
+        type: "Debit Account"
+      };
+
+      let data = {
+        memberId: member.id,
+        amount: this.amount,
+        phoneNumber: member.phoneNumber
+      };
+      this.$store
+        .dispatch("debitSavings", data)
+        .then(() => {
+          if (this.debitSavingStatus) {
+            this.$store.dispatch("postTransaction", transaction);
+            this.dialog = false;
+            this.setNull();
+            this.$store.dispatch("fetchSavings");
+            Toast.fire({
+              icon: "success",
+              title: "Account debited successfully"
+            });
+          } else {
+            Toast.fire({
+              icon: "error",
+              title: "Form validation failed"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    creditAccount() {
+      let member = this.$store.getters.getMemberByName(this.member);
+      let transaction = {
+        memberId: member.id,
+        amount: this.amount,
+        type: "Credit Account"
+      };
+
+      let data = {
+        memberId: member.id,
+        amount: this.amount,
+        phoneNumber: member.phoneNumber
+      };
+      this.$store
+        .dispatch("postSavings", data)
+        .then(() => {
+          if (this.postSavingStatus) {
+            this.$store.dispatch("postTransaction", transaction);
+            this.dialog = false;
+            this.setNull();
+            this.$store.dispatch("fetchSavings");
+            Toast.fire({
+              icon: "success",
+              title: "Account credited successfully"
+            });
+          } else {
+            Toast.fire({
+              icon: "error",
+              title: "Form validation failed"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     updateSaving() {
       let member = this.$store.getters.getMemberByName(this.member);
 
       let data = {
         memberId: member.id,
         amount: this.amount,
+        account_type: this.type,
         id: this.id
       };
       this.$store
@@ -269,6 +475,8 @@ export default {
     ...mapState([
       "postSavingStatus",
       "postSavingLoading",
+      "debitSavingStatus",
+      "debitSavingLoading",
       "savings",
       "savingsLoading",
       "updateSavingStatus",

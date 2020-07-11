@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getters = {
   isAuthenticated: state => !!state.token,
   getUserById: state => id => {
@@ -22,5 +24,15 @@ export const getters = {
   },
   getExpenseById: state => id => {
     return state.expenses.find(item => item.id === id);
+  },
+  values(state) {
+    return state.savings_trend.map(count => {
+      return count.Count;
+    });
+  },
+  dates(state) {
+    return state.savings_trend.map(count => {
+      return moment(count.Date).format("MMMM Do YYYY");
+    });
   }
 };

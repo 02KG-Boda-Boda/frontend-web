@@ -32,6 +32,9 @@
       <v-data-table
         :headers="headers"
         :items="expenses"
+        :loading="expensesLoading"
+        :multi-sort="true"
+        :calculate-widths="true"
         :search="search"
         :footer-props="{
           showFirstLastPage: true,
@@ -55,18 +58,20 @@
           <h5>Add Expense</h5>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   label="Expense title*"
                   v-model="title"
+                  :rules="titleRules"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   label="Expense amount*"
+                  :rules="amountRules"
                   v-model="amount"
                   required
                 ></v-text-field>
@@ -74,12 +79,13 @@
               <v-col cols="12">
                 <v-text-field
                   label="Expense note*"
+                  :rules="noteRules"
                   v-model="note"
                   required
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-container>
+          </v-form>
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
@@ -90,6 +96,7 @@
           <v-btn
             color="blue darken-1"
             text
+            :disabled="!valid"
             @click="postExpense"
             :loading="postExpenseLoading"
             >Save</v-btn
@@ -165,11 +172,15 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      valid: false,
       dialog: false,
       title: "",
       editDialog: false,
       note: "",
       amount: "",
+      titleRules: [v => !!v || "Title is required"],
+      noteRules: [v => !!v || "Note is required"],
+      amountRules: [v => !!v || "Amount is required"],
       items: [
         {
           text: "Home",

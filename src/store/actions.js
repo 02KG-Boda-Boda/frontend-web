@@ -131,6 +131,21 @@ export const actions = {
         commit("POST_SAVING_ERROR", err.response);
       });
   },
+  async debitSavings({ commit }, data) {
+    commit("DEBIT_SAVING_LOADING", true);
+    await axiosInstance
+      .post("/debitSaving", data)
+      .then(res => {
+        console.log(res);
+        commit("DEBIT_SAVING_STATUS", true);
+        commit("DEBIT_SAVING_LOADING", false);
+      })
+      .catch(err => {
+        commit("DEBIT_SAVING_LOADING", false);
+        commit("DEBIT_SAVING_STATUS", false);
+        commit("DEBIT_SAVING_ERROR", err.response);
+      });
+  },
   async fetchSavings({ commit }) {
     commit("FETCH_SAVINGS_LOADING", true);
     await axiosInstance
@@ -225,7 +240,7 @@ export const actions = {
       .get("/expenses")
       .then(res => {
         console.log(res);
-        commit("FETCH_EXPENSES", res.data);
+        commit("FETCH_EXPENSES", res.data.expenses);
         commit("FETCH_EXPENSES_LOADING", false);
       })
       .catch(err => {
@@ -247,5 +262,119 @@ export const actions = {
         commit("UPDATE_EXPENSE_STATUS", false);
         commit("UPDATE_EXPENSE_ERROR", err.response);
       });
-  }
+  },
+  async fetchEmployeesCount({ commit }) {
+    commit("FETCH_EMPLOYEE_COUNT_LOADING", true);
+    await axiosInstance
+      .get("/employees_count")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_EMPLOYEE_COUNT", res.data.employees_count);
+        commit("FETCH_EMPLOYEE_COUNT_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_EMPLOYEE_COUNT_LOADING", false);
+        commit("FETCH_EMPLOYEE_COUNT_ERROR", err.response);
+      });
+  },
+  async fetchSavingsCount({ commit }) {
+    commit("FETCH_SAVINGS_COUNT_LOADING", true);
+    await axiosInstance
+      .get("/savings_count")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_SAVINGS_COUNT", res.data.savings_count);
+        commit("FETCH_SAVINGS_COUNT_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_SAVINGS_COUNT_LOADING", false);
+        commit("FETCH_SAVINGS_COUNT_ERROR", err.response);
+      });
+  },
+  async fetchMembersCount({ commit }) {
+    commit("FETCH_MEMBERS_COUNT_LOADING", true);
+    await axiosInstance
+      .get("/members_count")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_MEMBERS_COUNT", res.data.members_count);
+        commit("FETCH_MEMBERS_COUNT_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_MEMBERS_COUNT_LOADING", false);
+        commit("FETCH_MEMBERS_COUNT_ERROR", err.response);
+      });
+  },
+  async fetchLoansCount({ commit }) {
+    commit("FETCH_LOANS_COUNT_LOADING", true);
+    await axiosInstance
+      .get("/loans_count")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_LOANS_COUNT", res.data.loans_count);
+        commit("FETCH_LOANS_COUNT_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_LOANS_COUNT_LOADING", false);
+        commit("FETCH_LOANS_COUNT_ERROR", err.response);
+      });
+  },
+  async fetchSavingsTrend({ commit }) {
+    commit("FETCH_SAVINGS_TREND_LOADING", true);
+    await axiosInstance
+      .get("/savings_trend")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_SAVINGS_TREND", res.data.savings_trend);
+        commit("FETCH_SAVINGS_TREND_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_SAVINGS_TREND_LOADING", false);
+        commit("FETCH_SAVINGS_TREND_ERROR", err.response);
+      });
+  },
+  async payLoan({ commit }, data) {
+    commit("PAY_LOAN_LOADING", true);
+    await axiosInstance
+      .post("/payLoan", data)
+      .then(res => {
+        console.log(res);
+        commit("PAY_LOAN_STATUS", true);
+        commit("PAY_LOAN_LOADING", false);
+      })
+      .catch(err => {
+        commit("PAY_LOAN_LOADING", false);
+        commit("PAY_LOAN_STATUS", false);
+        commit("PAY_LOAN_ERROR", err.response);
+      });
+  },
+  async postTransaction({ commit }, data) {
+    commit("POST_TRANSACTION_LOADING", true);
+    await axiosInstance
+      .post("/transactions", data)
+      .then(res => {
+        console.log(res);
+        commit("POST_TRANSACTION_STATUS", true);
+        commit("POST_TRANSACTION_LOADING", false);
+      })
+      .catch(err => {
+        commit("POST_TRANSACTION_LOADING", false);
+        commit("POST_TRANSACTION_STATUS", false);
+        commit("POST_TRANSACTION_ERROR", err.response);
+      });
+  },
+  async fetchTransactions({ commit }) {
+    commit("FETCH_TRANSACTIONS_LOADING", true);
+    await axiosInstance
+      .get("/transactions")
+      .then(res => {
+        console.log(res);
+        commit("FETCH_TRANSACTIONS", res.data.transactions);
+        commit("FETCH_TRANSACTIONS_LOADING", false);
+      })
+      .catch(err => {
+        commit("FETCH_TRANSACTIONS_LOADING", false);
+        commit("FETCH_TRANSACTIONS_ERROR", err.response);
+      });
+  },
 };

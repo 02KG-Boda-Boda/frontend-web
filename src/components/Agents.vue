@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */ /* eslint-disable prettier/prettier */ /*
+eslint-disable prettier/prettier */
 <template>
   <div style="padding:10px">
     <v-row>
@@ -63,12 +65,13 @@
           <h5>Add Employee</h5>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="First name*"
                   v-model="firstName"
+                  :rules="firstnameRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -76,19 +79,22 @@
                 <v-text-field
                   label="Last Name*"
                   v-model="lastName"
+                  :rules="lastnameRules"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="Phone Number*"
                   v-model="phoneNumber"
+                  :rules="phonenumberRules"
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="6"> 
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Email*"
                   v-model="email"
+                  :rules="emailRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -96,6 +102,7 @@
                 <v-text-field
                   label="NIN*"
                   v-model="nin"
+                  :rules="ninRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -104,6 +111,7 @@
                   label="Select Role"
                   :items="roles"
                   v-model="role"
+                  :rules="roleRules"
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12">
@@ -111,6 +119,7 @@
                   show-size
                   counter
                   label="Upload photo"
+                  :rules="photoRules"
                   v-model="photo"
                 ></v-file-input>
               </v-col>
@@ -118,12 +127,13 @@
                 <v-text-field
                   label="Password*"
                   type="password"
+                  :rules="passwordRules"
                   required
                   v-model="password"
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-container>
+          </v-form>
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
@@ -134,6 +144,7 @@
           <v-btn
             color="blue darken-1"
             text
+            :disabled="!valid"
             @click="signup"
             :loading="signupLoading"
             >Save</v-btn
@@ -169,7 +180,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="6"> 
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Email*"
                   v-model="email"
@@ -247,9 +258,11 @@ import "viewerjs/dist/viewer.css";
 export default {
   data() {
     return {
+      valid: false,
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
+      required: [field => !!field || "This field is required"],
       viewerOptions: {
         movable: false,
         rotatable: false,
@@ -258,6 +271,27 @@ export default {
       },
       firstName: "",
       lastName: "",
+      firstnameRules: [v => !!v || "First name is required"],
+      photoRules: [v => !!v || "Photo is required"],
+      roleRules: [v => !!v || "First name is required"],
+      lastnameRules: [v => !!v || "Last name is required"],
+      phonenumberRules: [
+        v => !!v || "Phone number is required",
+        v =>
+          (v && v.length >= 10) || "Phone number must be atleast 10 characters"
+      ],
+      emailRules: [
+        v => !!v || "E-mail is required",
+        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      ],
+      ninRules: [
+        v => !!v || "Nin number is required",
+        v => (v && v.length >= 14) || "Nin number must atleast 14 characters"
+      ],
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => (v && v.length >= 6) || "Password must atleast 6 characters"
+      ],
       phoneNumber: "",
       password: "",
       nin: "",
@@ -296,6 +330,9 @@ export default {
     };
   },
   methods: {
+    validate() {
+      this.$refs.form.validate();
+    },
     launchEdit(id) {
       this.editDialog = true;
       let user = this.$store.getters.getUserById(id);

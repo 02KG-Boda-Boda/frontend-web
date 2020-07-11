@@ -9,6 +9,7 @@ import store from "./store/store";
 import Agents from "./components/Agents.vue";
 import Savings from "./components/Savings.vue";
 import Expenses from "./components/Expenses.vue";
+import Transactions from "./components/Transactions.vue"
 
 Vue.use(Router);
 
@@ -72,6 +73,11 @@ const router = new Router({
           path: "expenses",
           name: "home.expenses",
           component: Expenses
+        },
+        {
+          path: "transactions",
+          name: "home.transactions",
+          component: Transactions
         }
       ]
     }

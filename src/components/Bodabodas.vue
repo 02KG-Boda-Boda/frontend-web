@@ -63,12 +63,13 @@
           <h5>Add Member</h5>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="First name*"
                   v-model="firstName"
+                  :rules="firstnameRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -76,12 +77,14 @@
                 <v-text-field
                   label="Last Name*"
                   v-model="lastName"
+                  :rules="lastnameRules"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Phone Number*"
                   v-model="phoneNumber"
+                  :rules="phonenumberRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -89,6 +92,7 @@
                 <v-text-field
                   label="NIN*"
                   v-model="nin"
+                  :rules="ninRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -96,12 +100,13 @@
                 <v-file-input
                   show-size
                   counter
+                  :rules="photoRules"
                   v-model="photo"
                   label="Upload passport photo*"
                 ></v-file-input>
               </v-col>
             </v-row>
-          </v-container>
+          </v-form>
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
@@ -112,6 +117,7 @@
           <v-btn
             color="blue darken-1"
             text
+            :disabled="!valid"
             @click="postMember"
             :loading="postMemberLoading"
             >Save</v-btn
@@ -176,7 +182,7 @@
             text
             @click="updateMember"
             :loading="updateMemberLoading"
-            >Save</v-btn
+            >Edit</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -203,6 +209,7 @@ import "viewerjs/dist/viewer.css";
 export default {
   data() {
     return {
+      valid: false,
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
@@ -211,6 +218,18 @@ export default {
       lastName: "",
       nin: "",
       phoneNumber: "",
+      firstnameRules: [v => !!v || "First name is required"],
+      photoRules: [v => !!v || "Photo is required"],
+      roleRules: [v => !!v || "First name is required"],
+      lastnameRules: [v => !!v || "Last name is required"],
+      phonenumberRules: [
+        v => !!v || "Phone number is required",
+        v => (v && v.length >= 10) || "Phone number must atleast 10 characters"
+      ],
+      ninRules: [
+        v => !!v || "Nin number is required",
+        v => (v && v.length >= 14) || "Nin number must be atleast 14 characters"
+      ],
       id: "",
       items: [
         {
@@ -235,6 +254,7 @@ export default {
         { text: "MEMBER NAME", value: "name" },
         { text: "REGISTERED BY", value: "registered_by" },
         { text: "PHONE NUMBER", value: "phoneNumber" },
+        { text: "PIN", value: "pin" },
         { text: "NIN", value: "nin" },
         { text: "ACTIONS", value: "actions" }
       ]

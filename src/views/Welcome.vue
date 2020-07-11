@@ -44,12 +44,12 @@
           active-class="dashboard-active"
           exact
         >
-          <v-list-item-icon style="font-size:16px">
+          <v-list-item-icon style="font-size:14px">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="font-size:16px">{{
+            <v-list-item-title style="font-size:14px">{{
               item.title
             }}</v-list-item-title>
           </v-list-item-content>
@@ -126,6 +126,11 @@ export default {
           title: "Expenses",
           icon: "mdi-clipboard-file",
           path: "home.expenses"
+        },
+        {
+          title: "Transactions",
+          icon: "mdi-clipboard-text-multiple",
+          path: "home.transactions"
         }
       ]
     };

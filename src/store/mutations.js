@@ -149,5 +149,86 @@ export const mutations = {
   },
   UPDATE_EXPENSE_ERROR(state, payload) {
     state.updateExpenseError = payload;
+  },
+  FETCH_EMPLOYEE_COUNT(state, payload) {
+    state.employees_count = payload;
+  },
+  FETCH_EMPLOYEE_COUNT_LOADING(state, payload) {
+    state.employees_countLoading = payload;
+  },
+  FETCH_EMPLOYEE_COUNT_ERROR(state, payload) {
+    state.fetchEmployees_countError = payload;
+  },
+  FETCH_SAVINGS_COUNT(state, payload) {
+    state.savings_count = payload;
+  },
+  FETCH_SAVINGS_COUNT_LOADING(state, payload) {
+    state.savings_countLoading = payload;
+  },
+  FETCH_SAVINGS_COUNT_ERROR(state, payload) {
+    state.fetchSavings_countError = payload;
+  },
+  FETCH_MEMBERS_COUNT(state, payload) {
+    state.members_count = payload;
+  },
+  FETCH_MEMBERS_COUNT_LOADING(state, payload) {
+    state.members_countLoading = payload;
+  },
+  FETCH_MEMBERS_COUNT_ERROR(state, payload) {
+    state.fetchMembers_countError = payload;
+  },
+  FETCH_LOANS_COUNT(state, payload) {
+    state.loans_count = payload;
+  },
+  FETCH_LOANS_COUNT_LOADING(state, payload) {
+    state.loans_countLoading = payload;
+  },
+  FETCH_LOANS_COUNT_ERROR(state, payload) {
+    state.fetchLoans_countError = payload;
+  },
+  FETCH_SAVINGS_TREND(state, payload) {
+    state.savings_trend = payload;
+  },
+  FETCH_SAVINGS_TREND_LOADING(state, payload) {
+    state.savings_trendLoading = payload;
+  },
+  FETCH_SAVINGS_TREND_ERROR(state, payload) {
+    state.fetchSavings_trendError = payload;
+  },
+  DEBIT_SAVING_STATUS(state, payload) {
+    state.debitSavingStatus = payload;
+  },
+  DEBIT_SAVING_LOADING(state, payload) {
+    state.debitSavingLoading = payload;
+  },
+  DEBIT_SAVING_ERROR(state, payload) {
+    state.debitSavingError = payload;
+  },
+  PAY_LOAN_STATUS(state, payload) {
+    state.payLoanStatus = payload;
+  },
+  PAY_LOAN_LOADING(state, payload) {
+    state.payLoanLoading = payload;
+  },
+  PAY_LOAN_ERROR(state, payload) {
+    state.payLoanError = payload;
+  },
+  POST_TRANSACTION_STATUS(state, payload) {
+    state.postTransactionStatus = payload;
+  },
+  POST_TRANSACTION_LOADING(state, payload) {
+    state.postTransactionLoading = payload;
+  },
+  POST_TRANSACTION_ERROR(state, payload) {
+    state.postTransactionError = payload;
+  },
+  FETCH_TRANSACTIONS(state, payload) {
+    state.transactions = payload;
+  },
+  FETCH_TRANSACTIONS_LOADING(state, payload) {
+    state.transactionsLoading = payload;
+  },
+  FETCH_TRANSACTIONS_ERROR(state, payload) {
+    state.fetchTransactionsError = payload;
   }
 };
