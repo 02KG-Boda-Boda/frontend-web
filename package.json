@@ -1,5 +1,5 @@
 {
-  "name": "bodaboda",
+  "name": "2G0",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "chart.js": "^2.9.3",
     "core-js": "^3.6.4",
     "moment": "^2.26.0",
+    "secure-ls": "^1.2.6",
     "sweetalert2": "^9.15.1",
     "v-viewer": "^1.5.1",
     "vue": "^2.6.11",

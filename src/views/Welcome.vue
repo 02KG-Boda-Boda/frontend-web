@@ -3,7 +3,9 @@
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down" style="font-size:28px">2G0</span>
+        <span class="hidden-sm-and-down" style="font-size:20px"
+          >2G0 Financial Services</span
+        >
       </v-toolbar-title>
       <v-spacer />
       <v-menu offset-y transition="scale-transition">
@@ -80,7 +82,7 @@
     <v-footer class="font-weight-medium">
       <v-col class="text-center" cols="12">
         &copy; {{ new Date().getFullYear() }} —
-        <strong>2G0</strong>
+        <strong>2G0 Financial services</strong>
       </v-col>
     </v-footer>
   </v-app>

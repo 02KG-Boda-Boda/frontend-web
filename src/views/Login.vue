@@ -21,8 +21,8 @@ export default {
 <style scoped>
 .login {
   background-image: linear-gradient(
-      rgba(0, 0, 0, 0.7) 50%,
-      rgba(1, 1, 1, 0.7) 50% 100%
+      rgba(0, 0, 0, 0.7) 20%,
+      rgba(1, 1, 1, 0.7) 20% 100%
     ),
     url("~@/assets/img/money.jpg");
   background-size: cover;

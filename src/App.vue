@@ -12,8 +12,9 @@ export default {
 
 <style>
 body,
+body,
 * {
-  font-family: "Montserrat", "sans-serif";
+  font-family: "Montserrat", sans-serif !important;
   font-size: 100%;
 }
 </style>
