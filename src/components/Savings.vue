@@ -49,7 +49,7 @@
           <span>{{ item.interest }}</span>
         </template>
          <template v-slot:item.id="{ item }">
-          <span>2G0{{ item.id }}</span>
+          <span>2G00{{ item.id }}</span>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
