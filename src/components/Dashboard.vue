@@ -22,7 +22,9 @@
             <v-list-item-content>
               <v-list-item-title class="headline" style="padding:5px">
                 <pulse-loader :loading="employees_countLoading"></pulse-loader>
-                <h5 v-if="!employees_countLoading">{{ employees_count }}</h5>
+                <h5 v-if="!employees_countLoading">
+                  {{ employees_count ? employees_count : 0 }}
+                </h5>
               </v-list-item-title>
               <v-divider></v-divider>
               <v-list-item-subtitle style="font-size:16px;padding:5px"
@@ -48,7 +50,9 @@
             <v-list-item-content>
               <v-list-item-title class="headline" style="padding:5px">
                 <pulse-loader :loading="savings_countLoading"></pulse-loader>
-                <h5 v-if="!savings_countLoading">{{ savings_count }}</h5>
+                <h5 v-if="!savings_countLoading">
+                  {{ savings_count ? savings_count : 0 }}
+                </h5>
               </v-list-item-title>
               <v-divider style="padding:5px"></v-divider>
               <v-list-item-subtitle style="font-size:16px;padding:5px"
@@ -71,7 +75,9 @@
             <v-list-item-content>
               <v-list-item-title class="headline" style="padding:5px">
                 <pulse-loader :loading="members_countLoading"></pulse-loader>
-                <h5 v-if="!members_countLoading">{{ members_count }}</h5>
+                <h5 v-if="!members_countLoading">
+                  {{ members_count ? members_count : 0 }}
+                </h5>
               </v-list-item-title>
               <v-divider></v-divider>
               <v-list-item-subtitle style="font-size:16px; padding:5px"
@@ -94,7 +100,9 @@
             <v-list-item-content>
               <v-list-item-title class="headline" style="padding:5px">
                 <pulse-loader :loading="loans_countLoading"></pulse-loader>
-                <h5 v-if="!loans_countLoading">{{ loans_count }}</h5>
+                <h5 v-if="!loans_countLoading">
+                  {{ loans_count ? loans_count : 0 }}
+                </h5>
               </v-list-item-title>
               <v-divider></v-divider>
               <v-list-item-subtitle style="font-size:16px; padding:5px"
