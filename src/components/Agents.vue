@@ -65,7 +65,7 @@
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="First name*"
                   v-model="firstName"
@@ -73,14 +73,14 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Last Name*"
                   v-model="lastName"
                   :rules="lastnameRules"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Phone Number*"
                   v-model="phoneNumber"
@@ -158,20 +158,20 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="First name*"
                   v-model="firstName"
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Last Name*"
                   v-model="lastName"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="Phone Number*"
                   v-model="phoneNumber"
