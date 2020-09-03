@@ -261,6 +261,9 @@ export default {
     };
   },
   methods: {
+    validate(){
+      this.$refs.form.validate();
+    },
     launchEdit(id) {
       this.editDialog = true;
       let user = this.$store.getters.getMemberById(id);
