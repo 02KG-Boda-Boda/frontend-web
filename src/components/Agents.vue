@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */ /* eslint-disable prettier/prettier */ /*
-eslint-disable prettier/prettier */
 <template>
   <div style="padding:10px">
     <v-row>
