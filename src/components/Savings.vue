@@ -39,7 +39,7 @@
           firstIcon: 'mdi-arrow-collapse-left',
           lastIcon: 'mdi-arrow-collapse-right',
           prevIcon: 'mdi-minus',
-          nextIcon: 'mdi-plus',
+          nextIcon: 'mdi-plus'
         }"
       >
         <template v-slot:item.date_issued="{ item }">
@@ -239,10 +239,10 @@ const Toast = Swal.mixin({
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
-  onOpen: (toast) => {
+  onOpen: toast => {
     toast.addEventListener("mouseenter", Swal.stopTimer);
     toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
+  }
 });
 import { mapState, mapGetters } from "vuex";
 export default {
@@ -256,45 +256,45 @@ export default {
       creditDialog: false,
       types: ["investments", "fixed", "ordinary"],
       type: "",
-      memberRules: [(v) => !!v || "Member is required"],
-      typeRules: [(v) => !!v || "Account Type is required"],
-      amountRules: [(v) => !!v || "Amount is required"],
+      memberRules: [v => !!v || "Member is required"],
+      typeRules: [v => !!v || "Account Type is required"],
+      amountRules: [v => !!v || "Amount is required"],
       items: [
         {
           text: "Home",
           disabled: false,
-          href: "breadcrumbs_dashboard",
+          href: "breadcrumbs_dashboard"
         },
         {
           text: "Savings",
           disabled: true,
-          href: "breadcrumbs_link_1",
-        },
+          href: "breadcrumbs_link_1"
+        }
       ],
       search: "",
       headers: [
         {
           text: "DATE ISSUED",
           align: "left",
-          value: "date_issued",
+          value: "date_issued"
         },
         {
           text: "ACCOUNT NUMBER",
           align: "left",
           sortable: false,
-          value: "id",
+          value: "id"
         },
         {
           text: "MEMBER NAME",
           align: "left",
           sortable: false,
-          value: "member",
+          value: "member"
         },
         { text: "ISSUED BY", value: "issued_by" },
         { text: "ACCOUNT TYPE", value: "account_type" },
         { text: "AMOUNT(Ugx)", value: "amount" },
-        { text: "ACTIONS", value: "actions" },
-      ],
+        { text: "ACTIONS", value: "actions" }
+      ]
     };
   },
   methods: {
@@ -332,14 +332,14 @@ export default {
       let transaction = {
         memberId: member.id,
         amount: this.amount,
-        type: "Savings Account Creation",
+        type: "Savings Account Creation"
       };
 
       let data = {
         memberId: member.id,
         amount: this.amount,
         account_type: this.type,
-        phoneNumber: member.phoneNumber,
+        phoneNumber: member.phoneNumber
       };
       this.$store
         .dispatch("postSavings", data)
@@ -351,16 +351,16 @@ export default {
             this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Amount Saved successfully",
+              title: "Amount Saved successfully"
             });
           } else {
             Toast.fire({
               icon: "error",
-              title: "Form validation failed",
+              title: "Form validation failed"
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -369,13 +369,13 @@ export default {
       let transaction = {
         memberId: member.id,
         amount: this.amount,
-        type: "Debit Account",
+        type: "Debit Account"
       };
 
       let data = {
         memberId: member.id,
         amount: this.amount,
-        phoneNumber: member.phoneNumber,
+        phoneNumber: member.phoneNumber
       };
       this.$store
         .dispatch("debitSavings", data)
@@ -387,16 +387,16 @@ export default {
             this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Account debited successfully",
+              title: "Account debited successfully"
             });
           } else {
             Toast.fire({
               icon: "error",
-              title: "Form validation failed",
+              title: "Form validation failed"
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -405,13 +405,13 @@ export default {
       let transaction = {
         memberId: member.id,
         amount: this.amount,
-        type: "Credit Account",
+        type: "Credit Account"
       };
 
       let data = {
         memberId: member.id,
         amount: this.amount,
-        phoneNumber: member.phoneNumber,
+        phoneNumber: member.phoneNumber
       };
       this.$store
         .dispatch("postSavings", data)
@@ -423,16 +423,16 @@ export default {
             this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Account credited successfully",
+              title: "Account credited successfully"
             });
           } else {
             Toast.fire({
               icon: "error",
-              title: "Form validation failed",
+              title: "Form validation failed"
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -443,7 +443,7 @@ export default {
         memberId: member.id,
         amount: this.amount,
         account_type: this.type,
-        id: this.id,
+        id: this.id
       };
       this.$store
         .dispatch("updateSaving", data)
@@ -454,21 +454,22 @@ export default {
             this.$store.dispatch("fetchSavings");
             Toast.fire({
               icon: "success",
-              title: "Saving sucessfully edited",
+              title: "Saving sucessfully edited"
             });
           } else {
             Toast.fire({
               icon: "error",
-              title: "Form validation failed",
+              title: "Form validation failed"
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
-    },
+    }
   },
   beforeCreate() {
+    this.$store.dispatch("fetchMembers");
     this.$store.dispatch("fetchSavings");
   },
   computed: {
@@ -480,9 +481,9 @@ export default {
       "savings",
       "savingsLoading",
       "updateSavingStatus",
-      "updateSavingLoading",
+      "updateSavingLoading"
     ]),
-    ...mapGetters(["getMembersNames"]),
-  },
+    ...mapGetters(["getMembersNames"])
+  }
 };
 </script>

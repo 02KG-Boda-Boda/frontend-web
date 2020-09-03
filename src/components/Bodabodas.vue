@@ -261,7 +261,7 @@ export default {
     };
   },
   methods: {
-    validate(){
+    validate() {
       this.$refs.form.validate();
     },
     launchEdit(id) {

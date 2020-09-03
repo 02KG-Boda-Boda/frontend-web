@@ -406,6 +406,7 @@ export default {
     }
   },
   beforeCreate() {
+    this.$store.dispatch("fetchMembers");
     this.$store.dispatch("fetchLoans");
   },
   computed: {

@@ -104,7 +104,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col class="d-flex" cols="12">
+              <v-col cols="12" sm="6" md="6">
                 <v-autocomplete
                   label="Select Role"
                   :items="roles"
@@ -192,7 +192,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col class="d-flex" cols="12">
+              <v-col cols="12" sm="6" md="6">
                 <v-autocomplete
                   label="Select Role"
                   :items="roles"
