@@ -393,7 +393,7 @@ export default {
         .dispatch("deleteMember", {data, id})
         .then(() => {
           if (this.deleteMemberStatus) {
-            this.editDialog = false;
+            this.deleteDialog = false;
             this.setNull();
             this.$store.dispatch("fetchMembers");
             Toast.fire({
