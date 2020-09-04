@@ -54,6 +54,7 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
+          <v-icon color="red" @click="deleteMember">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -203,7 +204,6 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   }
 });
-
 import { mapState } from "vuex";
 import "viewerjs/dist/viewer.css";
 export default {
@@ -287,7 +287,6 @@ export default {
       data.append("passport_photo", this.photo);
       data.append("phoneNumber", this.phoneNumber);
       data.append("nin", this.nin);
-
       this.$store
         .dispatch("postMember", data)
         .then(() => {
@@ -310,6 +309,34 @@ export default {
           console.log(err);
         });
     },
+    deleteMember() {
+      let data = new FormData();
+      data.append("firstName", this.firstName);
+      data.append("lastName", this.lastName);
+      data.append("passport_photo", this.photo);
+      data.append("phoneNumber", this.phoneNumber);
+      data.append("nin", this.nin);
+      const id = this.id;
+      this.$store
+        .dispatch("deleteMember", {data, id})
+        .then(() => {
+          if (this.deleteMemberStatus) {
+            this.$store.dispatch("fetchMembers");
+            Toast.fire({
+              icon: "success",
+              title: "Member deleted successfully"
+            });
+          } else {
+            Toast.fire({
+              icon: "error",
+              title: "Delete failed"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     updateMember() {
       let data = new FormData();
       data.append("firstName", this.firstName);
@@ -319,7 +346,6 @@ export default {
       data.append("nin", this.nin);
       data.append("id", this.id);
       const id = this.id;
-
       this.$store
         .dispatch("updateMember", { data, id })
         .then(() => {
@@ -354,7 +380,10 @@ export default {
       "members",
       "membersLoading",
       "updateMemberLoading",
-      "updateMemberStatus"
+      "updateMemberStatus",
+      "deleteMemberLoading",
+      "deleteMemberStatus",
+      "deleteMemberError
     ])
   }
 };
