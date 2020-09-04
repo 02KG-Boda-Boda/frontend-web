@@ -191,7 +191,7 @@
     <v-dialog v-model="deleteDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h5>Edit Member</h5>
+          <h5>Delete Member</h5>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -275,6 +275,7 @@ export default {
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
+      deleteDialog: false,
       photo: null,
       firstName: "",
       lastName: "",
