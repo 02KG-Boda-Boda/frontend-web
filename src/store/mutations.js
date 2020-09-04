@@ -42,6 +42,15 @@ export const mutations = {
   UPDATE_USER_ERROR(state, payload) {
     state.updateUserError = payload;
   },
+  DELETE_MEMBER_STATUS(state, payload) {
+    state.deleteMemberStatus = payload;
+  },
+  DELETE_MEMBER_LOADING(state, payload) {
+    state.deleteMemberLoading = payload;
+  },
+  DELETE_MEMBER_ERROR(state, payload) {
+    state.deleteMemberError = payload;
+  },
   POST_MEMBER_STATUS(state, payload) {
     state.postMemberStatus = payload;
   },
