@@ -54,7 +54,6 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="red" @click="deleteMember">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -311,35 +310,6 @@ export default {
           console.log(err);
         });
     },
-    deleteMember() {
-      let data = new FormData();
-      data.append("firstName", this.firstName);
-      data.append("lastName", this.lastName);
-      data.append("passport_photo", this.photo);
-      data.append("phoneNumber", this.phoneNumber);
-      data.append("nin", this.nin);
-      const id = this.id;
-
-      this.$store
-        .dispatch("deleteMember", {data, id})
-        .then(() => {
-          if (this.deleteMemberStatus) {
-            this.$store.dispatch("fetchMembers");
-            Toast.fire({
-              icon: "success",
-              title: "Member deleted successfully"
-            });
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Delete failed"
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
     updateMember() {
       let data = new FormData();
       data.append("firstName", this.firstName);
@@ -384,10 +354,7 @@ export default {
       "members",
       "membersLoading",
       "updateMemberLoading",
-      "updateMemberStatus",
-      "deleteMemberLoading",
-      "deleteMemberStatus",
-      "deleteMemberError
+      "updateMemberStatus"
     ])
   }
 };
