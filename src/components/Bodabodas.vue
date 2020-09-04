@@ -383,7 +383,7 @@ export default {
       "updateMemberStatus",
       "deleteMemberLoading",
       "deleteMemberStatus",
-      "deleteMemberError
+      "deleteMemberError"
     ])
   }
 };
