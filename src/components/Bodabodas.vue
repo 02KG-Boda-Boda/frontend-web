@@ -381,6 +381,13 @@ export default {
         });
     },
     deleteMember() {
+      let data = new FormData();
+      data.append("firstName", this.firstName);
+      data.append("lastName", this.lastName);
+      data.append("passport_photo", this.photo);
+      data.append("phoneNumber", this.phoneNumber);
+      data.append("nin", this.nin);
+      data.append("id", this.id);
       const id = this.id;
       this.$store
         .dispatch("deleteMember", {data, id})
