@@ -116,6 +116,21 @@ export const actions = {
         commit("UPDATE_MEMBER_ERROR", err.response);
       });
   },
+  async deleteMember({ commit }, payload) {
+    commit("DELETE_MEMBER_LOADING", true);
+    await axiosInstance
+      .delete("/members/" + payload.id, payload.data)
+      .then(res => {
+        console.log(res);
+        commit("DELETE_MEMBER_STATUS", true);
+        commit("DELETE_MEMBER_LOADING", false);
+      })
+      .catch(err => {
+        commit("DELETE_MEMBER_LOADING", false);
+        commit("DELETE_MEMBER_STATUS", false);
+        commit("DELETE_MEMBER_ERROR", err.response);
+      });
+  },
   async postSavings({ commit }, data) {
     commit("POST_SAVING_LOADING", true);
     await axiosInstance
