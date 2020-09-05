@@ -203,6 +203,7 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   }
 });
+
 import { mapState } from "vuex";
 import "viewerjs/dist/viewer.css";
 export default {
@@ -212,7 +213,6 @@ export default {
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
-      deleteDialog: false,
       photo: null,
       firstName: "",
       lastName: "",
@@ -287,6 +287,7 @@ export default {
       data.append("passport_photo", this.photo);
       data.append("phoneNumber", this.phoneNumber);
       data.append("nin", this.nin);
+
       this.$store
         .dispatch("postMember", data)
         .then(() => {
@@ -318,6 +319,7 @@ export default {
       data.append("nin", this.nin);
       data.append("id", this.id);
       const id = this.id;
+
       this.$store
         .dispatch("updateMember", { data, id })
         .then(() => {
