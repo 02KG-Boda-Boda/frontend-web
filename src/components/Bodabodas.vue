@@ -54,7 +54,6 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -188,68 +187,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="deleteDialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <h5>Delete Member</h5>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  v-model="photo"
-                  label="Upload passport photo*"
-                ></v-file-input>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteDialog = false"
-            >Close</v-btn
-          >
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="deleteMember"
-            :loading="deleteMemberLoading"
-            >Delete</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -336,15 +273,6 @@ export default {
       this.nin = user.nin;
       this.id = id;
     },
-    launchDelete(id) {
-      this.deleteDialog = true;
-      let user = this.$store.getters.getMemberById(id);
-      this.lastName = user.lastName;
-      this.firstName = user.firstName;
-      this.phoneNumber = user.phoneNumber;
-      this.nin = user.nin;
-      this.id = id;
-    },
     setNull() {
       this.firstName = "";
       this.lastName = "";
@@ -374,37 +302,6 @@ export default {
             Toast.fire({
               icon: "error",
               title: "Form validation failed"
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    deleteMember() {
-      let data = new FormData();
-      data.append("firstName", this.firstName);
-      data.append("lastName", this.lastName);
-      data.append("passport_photo", this.photo);
-      data.append("phoneNumber", this.phoneNumber);
-      data.append("nin", this.nin);
-      data.append("id", this.id);
-      const id = this.id;
-      this.$store
-        .dispatch("deleteMember", {data, id})
-        .then(() => {
-          if (this.deleteMemberStatus) {
-            this.deleteDialog = false;
-            this.setNull();
-            this.$store.dispatch("fetchMembers");
-            Toast.fire({
-              icon: "success",
-              title: "Member deleted successfully"
-            });
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Delete failed"
             });
           }
         })
@@ -455,10 +352,7 @@ export default {
       "members",
       "membersLoading",
       "updateMemberLoading",
-      "updateMemberStatus",
-      "deleteMemberLoading",
-      "deleteMemberStatus",
-      "deleteMemberError"
+      "updateMemberStatus"
     ])
   }
 };
