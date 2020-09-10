@@ -376,5 +376,5 @@ export const actions = {
         commit("FETCH_TRANSACTIONS_LOADING", false);
         commit("FETCH_TRANSACTIONS_ERROR", err.response);
       });
-  },
+  }
 };

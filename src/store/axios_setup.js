@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://167.71.203.63:3000/api/V1";
+const API_URL = "http://localhost:5000/api/V1";
 const token = localStorage.getItem("token");
 
 let settings = {
