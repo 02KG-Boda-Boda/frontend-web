@@ -54,7 +54,9 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
+          <v-icon color="red" @click="launchDelete(item.id)"
+            >mdi-trash-can-outline</v-icon
+          >
         </template>
       </v-data-table>
     </v-card>
@@ -502,7 +504,7 @@ export default {
             this.$store.dispatch("fetchMembers");
             Toast.fire({
               icon: "success",
-              title: "Member account created updated"
+              title: "Account Deleted successfully"
             });
           } else {
             Toast.fire({
@@ -529,7 +531,7 @@ export default {
       "updateMemberLoading",
       "updateMemberStatus",
       "deleteMemberLoading",
-      "deleteMemberStatuss"
+      "deleteMemberStatus"
     ])
   }
 };
