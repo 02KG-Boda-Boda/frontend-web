@@ -390,7 +390,6 @@ export default {
       data.append("email", this.email);
       data.append("firstName", this.firstName);
       data.append("lastName", this.lastName);
-      data.append("password", this.password);
       data.append("photo", this.photo);
       data.append("role", this.role);
       data.append("phoneNumber", this.phoneNumber);
