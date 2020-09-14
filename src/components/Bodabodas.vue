@@ -8,11 +8,7 @@
       </v-breadcrumbs>
     </v-row>
     <v-layout flex align-end justify-end style="padding-bottom:10px">
-      <v-btn
-        @click.stop="dialog = true"
-        color="success"
-        style="text-transform:capitalize"
-      >
+      <v-btn @click.stop="dialog = true" color="success" style="text-transform:capitalize">
         add members
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
@@ -54,9 +50,7 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="red" @click="launchDelete(item.id)"
-            >mdi-trash-can-outline</v-icon
-          >
+          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -77,11 +71,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                  :rules="lastnameRules"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName" :rules="lastnameRules"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
@@ -92,12 +82,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  :rules="ninRules"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" :rules="ninRules" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-file-input
@@ -114,17 +99,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             :disabled="!valid"
             @click="postMember"
             :loading="postMemberLoading"
-            >Save</v-btn
-          >
+          >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -137,39 +119,19 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
+                <v-text-field label="First name*" v-model="firstName" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  v-model="photo"
-                  label="Upload passport photo*"
-                ></v-file-input>
+                <v-file-input show-size counter v-model="photo" label="Upload passport photo*"></v-file-input>
               </v-col>
             </v-row>
           </v-container>
@@ -177,16 +139,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="editDialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="editDialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="updateMember"
             :loading="updateMemberLoading"
-            >Edit</v-btn
-          >
+          >Edit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -207,11 +166,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                  :rules="lastnameRules"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName" :rules="lastnameRules"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
@@ -222,12 +177,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  :rules="ninRules"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" :rules="ninRules" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-file-input
@@ -244,17 +194,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             :disabled="!valid"
             @click="postMember"
             :loading="postMemberLoading"
-            >Save</v-btn
-          >
+          >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -267,39 +214,19 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
+                <v-text-field label="First name*" v-model="firstName" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  v-model="photo"
-                  label="Upload passport photo*"
-                ></v-file-input>
+                <v-file-input show-size counter v-model="photo" label="Upload passport photo*"></v-file-input>
               </v-col>
             </v-row>
           </v-container>
@@ -307,16 +234,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteDialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="deleteDialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="deleteMember"
             :loading="deleteMemberLoading"
-            >Delete</v-btn
-          >
+          >Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -347,6 +271,12 @@ export default {
       dialog: false,
       editDialog: false,
       deleteDialog: false,
+      viewerOptions: {
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        url: "data-href"
+      },
       photo: null,
       firstName: "",
       lastName: "",

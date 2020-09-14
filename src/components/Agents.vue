@@ -239,6 +239,7 @@ export default {
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
+      deleteDialog: false,
       required: [field => !!field || "This field is required"],
       viewerOptions: {
         movable: false,

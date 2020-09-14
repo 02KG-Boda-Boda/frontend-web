@@ -168,6 +168,15 @@ export const mutations = {
     UPDATE_EXPENSE_ERROR(state, payload) {
         state.updateExpenseError = payload;
     },
+    DELETE_EXPENSE_STATUS(state, payload) {
+        state.updateExpenseStatus = payload;
+    },
+    DELETE_EXPENSE_LOADING(state, payload) {
+        state.updateExpenseLoading = payload;
+    },
+    DELETE_EXPENSE_ERROR(state, payload) {
+        state.updateExpenseError = payload;
+    },
     FETCH_EMPLOYEE_COUNT(state, payload) {
         state.employees_count = payload;
     },

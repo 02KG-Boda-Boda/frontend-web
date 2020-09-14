@@ -336,6 +336,23 @@ export const actions = {
                 commit("UPDATE_EXPENSE_ERROR", err.response);
             });
     },
+    async deleteExpense({
+        commit
+    }, payload) {
+        commit("DELETE_EXPENSE_LOADING", true);
+        await axiosInstance
+            .delete("/expenses/" + payload.id, payload)
+            .then(res => {
+                console.log(res);
+                commit("DELETE_EXPENSE_STATUS", true);
+                commit("DELETE_EXPENSE_LOADING", false);
+            })
+            .catch(err => {
+                commit("DELETE_EXPENSE_LOADING", false);
+                commit("DELETE_EXPENSE_STATUS", false);
+                commit("DELETE_EXPENSE_ERROR", err.response);
+            });
+    },
     async fetchEmployeesCount({
         commit
     }) {
