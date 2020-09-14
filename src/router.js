@@ -9,7 +9,7 @@ import store from "./store/store";
 import Agents from "./components/Agents.vue";
 import Savings from "./components/Savings.vue";
 import Expenses from "./components/Expenses.vue";
-import Transactions from "./components/Transactions.vue"
+import Transactions from "./components/Transactions.vue";
 
 Vue.use(Router);
 

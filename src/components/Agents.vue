@@ -8,11 +8,7 @@
       </v-breadcrumbs>
     </v-row>
     <v-layout flex align-end justify-end style="padding-bottom:10px">
-      <v-btn
-        @click.stop="dialog = true"
-        color="success"
-        style="text-transform:capitalize"
-      >
+      <v-btn @click.stop="dialog = true" color="success" style="text-transform:capitalize">
         add employee
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
@@ -54,6 +50,7 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
+          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -74,11 +71,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                  :rules="lastnameRules"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName" :rules="lastnameRules"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
@@ -89,20 +82,10 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Email*"
-                  v-model="email"
-                  :rules="emailRules"
-                  required
-                ></v-text-field>
+                <v-text-field label="Email*" v-model="email" :rules="emailRules" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  :rules="ninRules"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" :rules="ninRules" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-autocomplete
@@ -136,17 +119,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             :disabled="!valid"
             @click="signup"
             :loading="signupLoading"
-            >Save</v-btn
-          >
+          >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -159,61 +139,28 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                  required
-                ></v-text-field>
+                <v-text-field label="First name*" v-model="firstName" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Last Name*"
-                  v-model="lastName"
-                ></v-text-field>
+                <v-text-field label="Last Name*" v-model="lastName"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Phone Number*"
-                  v-model="phoneNumber"
-                  required
-                ></v-text-field>
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Email*"
-                  v-model="email"
-                  required
-                ></v-text-field>
+                <v-text-field label="Email*" v-model="email" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="NIN*"
-                  v-model="nin"
-                  required
-                ></v-text-field>
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-autocomplete
-                  label="Select Role"
-                  :items="roles"
-                  v-model="role"
-                ></v-autocomplete>
+                <v-autocomplete label="Select Role" :items="roles" v-model="role"></v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <v-file-input
-                  show-size
-                  counter
-                  label="Upload photo"
-                  v-model="photo"
-                ></v-file-input>
+                <v-file-input show-size counter label="Upload photo" v-model="photo"></v-file-input>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                  v-model="password"
-                ></v-text-field>
+                <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -221,16 +168,48 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="editDialog = false"
-            >Close</v-btn
-          >
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="updateUser"
-            :loading="updateUserLoading"
-            >Save</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="editDialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="updateUser" :loading="updateUserLoading">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="deleteDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <h5>Delete Employee</h5>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="First name*" v-model="firstName" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="Last Name*" v-model="lastName"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="Phone Number*" v-model="phoneNumber" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="Email*" v-model="email" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-text-field label="NIN*" v-model="nin" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-autocomplete label="Select Role" :items="roles" v-model="role"></v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                <v-file-input show-size counter label="Upload photo" v-model="photo"></v-file-input>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-2" text @click="deleteDialog = false">Close</v-btn>
+          <v-btn color="blue darken-2" text @click="deleteUser" :loading="deleteUserLoading">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -260,6 +239,7 @@ export default {
       url: process.env.VUE_APP_API_URL,
       dialog: false,
       editDialog: false,
+      deleteDialog: false,
       required: [field => !!field || "This field is required"],
       viewerOptions: {
         movable: false,
@@ -333,6 +313,17 @@ export default {
     },
     launchEdit(id) {
       this.editDialog = true;
+      let user = this.$store.getters.getUserById(id);
+      this.email = user.email;
+      this.lastName = user.lastName;
+      this.firstName = user.firstName;
+      this.phoneNumber = user.phoneNumber;
+      this.role = user.role;
+      this.nin = user.nin;
+      this.id = id;
+    },
+    launchDelete(id) {
+      this.deleteDialog = true;
       let user = this.$store.getters.getUserById(id);
       this.email = user.email;
       this.lastName = user.lastName;
@@ -418,6 +409,40 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    deleteUser() {
+      let data = new FormData();
+      data.append("email", this.email);
+      data.append("firstName", this.firstName);
+      data.append("lastName", this.lastName);
+      data.append("photo", this.photo);
+      data.append("role", this.role);
+      data.append("phoneNumber", this.phoneNumber);
+      data.append("nin", this.nin);
+      data.append("id", this.id);
+      const id = this.id;
+
+      this.$store
+        .dispatch("deleteUser", { data, id })
+        .then(() => {
+          if (this.deleteUserStatus) {
+            this.deleteDialog = false;
+            this.setNull();
+            this.$store.dispatch("fetchUsers");
+            Toast.fire({
+              icon: "success",
+              title: "User account deleted"
+            });
+          } else {
+            Toast.fire({
+              icon: "error",
+              title: "Something went wrong"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   beforeCreate() {
@@ -431,7 +456,9 @@ export default {
       "users",
       "usersLoading",
       "updateUserLoading",
-      "updateUserStatus"
+      "updateUserStatus",
+      "deleteUserLoading",
+      "deleteUserStatus"
     ])
   }
 };

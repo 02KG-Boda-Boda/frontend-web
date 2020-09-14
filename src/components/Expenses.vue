@@ -8,11 +8,7 @@
       </v-breadcrumbs>
     </v-row>
     <v-layout flex align-end justify-end style="padding-bottom:10px">
-      <v-btn
-        @click.stop="dialog = true"
-        color="success"
-        style="text-transform:capitalize"
-      >
+      <v-btn @click.stop="dialog = true" color="success" style="text-transform:capitalize">
         add Expense
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
@@ -49,6 +45,7 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
+          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -61,12 +58,7 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  label="Expense title*"
-                  v-model="title"
-                  :rules="titleRules"
-                  required
-                ></v-text-field>
+                <v-text-field label="Expense title*" v-model="title" :rules="titleRules" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -77,12 +69,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Expense note*"
-                  :rules="noteRules"
-                  v-model="note"
-                  required
-                ></v-text-field>
+                <v-text-field label="Expense note*" :rules="noteRules" v-model="note" required></v-text-field>
               </v-col>
             </v-row>
           </v-form>
@@ -90,17 +77,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             :disabled="!valid"
             @click="postExpense"
             :loading="postExpenseLoading"
-            >Save</v-btn
-          >
+          >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -113,25 +97,13 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  label="Expense title*"
-                  v-model="title"
-                  required
-                ></v-text-field>
+                <v-text-field label="Expense title*" v-model="title" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Expense amount*"
-                  v-model="amount"
-                  required
-                ></v-text-field>
+                <v-text-field label="Expense amount*" v-model="amount" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Expense note*"
-                  v-model="note"
-                  required
-                ></v-text-field>
+                <v-text-field label="Expense note*" v-model="note" required></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -139,16 +111,46 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="editDialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="editDialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="updateExpense"
             :loading="updateExpenseLoading"
-            >Edit</v-btn
-          >
+          >Edit</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="deleteDialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <h5>Delete Expense</h5>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field label="Expense title*" v-model="title" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Expense amount*" v-model="amount" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Expense note*" v-model="note" required></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="deleteDialog = false">Close</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="deleteExpense"
+            :loading="deleteExpenseLoading"
+          >Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -176,6 +178,7 @@ export default {
       dialog: false,
       title: "",
       editDialog: false,
+      deleteDialog: false,
       note: "",
       amount: "",
       titleRules: [v => !!v || "Title is required"],
@@ -216,9 +219,18 @@ export default {
     setNull() {
       this.title = "";
       this.amount = "";
+      this.note = "";
     },
     launchEdit(id) {
       this.editDialog = true;
+      let expense = this.$store.getters.getExpenseById(id);
+      this.title = expense.title;
+      this.amount = expense.amount;
+      this.note = expense.note;
+      this.id = expense.id;
+    },
+    launchDelete(id) {
+      this.deleteDialog = true;
       let expense = this.$store.getters.getExpenseById(id);
       this.title = expense.title;
       this.amount = expense.amount;
@@ -281,6 +293,35 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    deleteExpense() {
+      let data = {
+        title: this.title,
+        amount: this.amount,
+        note: this.note,
+        id: this.id
+      };
+      this.$store
+        .dispatch("deleteExpense", data)
+        .then(() => {
+          if (this.deleteExpenseStatus) {
+            this.deleteDialog = false;
+            this.setNull();
+            this.$store.dispatch("fetchExpenses");
+            Toast.fire({
+              icon: "success",
+              title: "Expenses sucessfully deleted"
+            });
+          } else {
+            Toast.fire({
+              icon: "error",
+              title: "Form validation failed"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   beforeCreate() {
@@ -293,7 +334,9 @@ export default {
       "expenses",
       "expensesLoading",
       "updateExpenseStatus",
-      "updateExpenseLoading"
+      "updateExpenseLoading",
+      "deleteExpenseStatus",
+      "deleteExpenseLoading"
     ])
   }
 };
