@@ -236,6 +236,23 @@ export const actions = {
                 commit("UPDATE_SAVING_ERROR", err.response);
             });
     },
+    async deleteSaving({
+        commit
+    }, payload) {
+        commit("DELETE_SAVING_LOADING", true);
+        await axiosInstance
+            .delete("/savings/" + payload.id, payload)
+            .then(res => {
+                console.log(res);
+                commit("DELETE_SAVING_STATUS", true);
+                commit("DELETE_SAVING_LOADING", false);
+            })
+            .catch(err => {
+                commit("DELETE_SAVING_LOADING", false);
+                commit("DELETE_SAVING_STATUS", false);
+                commit("DELETE_SAVING_ERROR", err.response);
+            });
+    },
     async postLoan({
         commit
     }, data) {
@@ -284,6 +301,23 @@ export const actions = {
                 commit("UPDATE_LOAN_LOADING", false);
                 commit("UPDATE_LOAN_STATUS", false);
                 commit("UPDATE_LOAN_ERROR", err.response);
+            });
+    },
+    async deleteLoan({
+        commit
+    }, payload) {
+        commit("DELETE_LOAN_LOADING", true);
+        await axiosInstance
+            .delete("/loans/" + payload.id, payload)
+            .then(res => {
+                console.log(res);
+                commit("DELETE_LOAN_STATUS", true);
+                commit("DELETE_LOAN_LOADING", false);
+            })
+            .catch(err => {
+                commit("DELETE_LOAN_LOADING", false);
+                commit("DELETE_LOAN_STATUS", false);
+                commit("DELETE_LOAN_ERROR", err.response);
             });
     },
     async postExpense({

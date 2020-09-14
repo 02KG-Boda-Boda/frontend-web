@@ -114,6 +114,15 @@ export const mutations = {
     UPDATE_SAVING_ERROR(state, payload) {
         state.updateSavingError = payload;
     },
+    DELETE_SAVING_STATUS(state, payload) {
+        state.deleteSavingStatus = payload;
+    },
+    DELETE_SAVING_LOADING(state, payload) {
+        state.deleteSavingLoading = payload;
+    },
+    DELETE_SAVING_ERROR(state, payload) {
+        state.deleteSavingError = payload;
+    },
     POST_LOAN_STATUS(state, payload) {
         state.postLoanStatus = payload;
     },
@@ -140,6 +149,15 @@ export const mutations = {
     },
     UPDATE_LOAN_ERROR(state, payload) {
         state.updateLoanError = payload;
+    },
+    DELETE_LOAN_STATUS(state, payload) {
+        state.deleteLoanStatus = payload;
+    },
+    DELETE_LOAN_LOADING(state, payload) {
+        state.deleteLoanLoading = payload;
+    },
+    DELETE_LOAN_ERROR(state, payload) {
+        state.deleteLoanError = payload;
     },
     POST_EXPENSE_STATUS(state, payload) {
         state.postExpenseStatus = payload;
@@ -169,13 +187,13 @@ export const mutations = {
         state.updateExpenseError = payload;
     },
     DELETE_EXPENSE_STATUS(state, payload) {
-        state.updateExpenseStatus = payload;
+        state.deleteExpenseStatus = payload;
     },
     DELETE_EXPENSE_LOADING(state, payload) {
-        state.updateExpenseLoading = payload;
+        state.deleteExpenseLoading = payload;
     },
     DELETE_EXPENSE_ERROR(state, payload) {
-        state.updateExpenseError = payload;
+        state.deleteExpenseError = payload;
     },
     FETCH_EMPLOYEE_COUNT(state, payload) {
         state.employees_count = payload;

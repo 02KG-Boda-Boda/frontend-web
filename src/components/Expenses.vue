@@ -219,6 +219,7 @@ export default {
     setNull() {
       this.title = "";
       this.amount = "";
+      this.note = "";
     },
     launchEdit(id) {
       this.editDialog = true;
