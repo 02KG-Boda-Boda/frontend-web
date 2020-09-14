@@ -410,6 +410,17 @@ export default {
         });
     },
     deleteUser() {
+      let data = new FormData();
+      data.append("email", this.email);
+      data.append("firstName", this.firstName);
+      data.append("lastName", this.lastName);
+      data.append("photo", this.photo);
+      data.append("role", this.role);
+      data.append("phoneNumber", this.phoneNumber);
+      data.append("nin", this.nin);
+      data.append("id", this.id);
+      const id = this.id;
+
       this.$store
         .dispatch("deleteUser", { data, id })
         .then(() => {
