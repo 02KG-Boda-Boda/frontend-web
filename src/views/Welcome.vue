@@ -44,6 +44,7 @@
           :key="item.title"
           :to="{ name: item.path }"
           active-class="dashboard-active"
+          style="font-size:13dp"
           exact
         >
           <v-list-item-icon style="font-size:14px">
