@@ -112,7 +112,7 @@ export default {
         },
         {
           title: "Members",
-          icon: "mdi-motorbike",
+          icon: "mdi-account-child",
           path: "home.members"
         },
         {

@@ -71,7 +71,7 @@
           :loading="members_countLoading"
         >
           <v-list-item>
-            <v-icon color="lime darken-1" size="120">mdi-motorbike</v-icon>
+            <v-icon color="lime darken-1" size="120">mdi-account-child</v-icon>
             <v-list-item-content>
               <v-list-item-title class="headline" style="padding:5px">
                 <pulse-loader :loading="members_countLoading"></pulse-loader>
