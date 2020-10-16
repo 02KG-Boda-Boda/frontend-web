@@ -8,7 +8,11 @@
       </v-breadcrumbs>
     </v-row>
     <v-layout flex align-end justify-end style="padding-bottom:10px">
-      <v-btn @click.stop="dialog = true" color="success" style="text-transform:capitalize">
+      <v-btn
+        @click.stop="dialog = true"
+        color="success"
+        style="text-transform:capitalize"
+      >
         register loan
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
@@ -43,8 +47,12 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="green" @click="launchPay(item.id)">mdi-cash-plus</v-icon>
-          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
+          <v-icon color="green" @click="launchPay(item.id)"
+            >mdi-cash-plus</v-icon
+          >
+          <v-icon color="red" @click="deleteLoan(item.id)"
+            >mdi-trash-can-outline</v-icon
+          >
         </template>
       </v-data-table>
     </v-card>
@@ -66,13 +74,27 @@
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan amount*" v-model="amount" :rules="amountRules" required></v-text-field>
+                <v-text-field
+                  label="Loan amount*"
+                  v-model="amount"
+                  :rules="amountRules"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan Interest*" v-model="interest" required></v-text-field>
+                <v-text-field
+                  label="Loan Interest*"
+                  v-model="interest"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan period*" v-model="period" :rules="periodRules" required></v-text-field>
+                <v-text-field
+                  label="Loan period*"
+                  v-model="period"
+                  :rules="periodRules"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
@@ -80,14 +102,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false"
+            >Close</v-btn
+          >
           <v-btn
             color="blue darken-1"
             text
             @click="postLoan"
             :disabled="!valid"
             :loading="postLoanLoading"
-          >Save</v-btn>
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -108,13 +133,25 @@
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan amount*" v-model="amount" required></v-text-field>
+                <v-text-field
+                  label="Loan amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan Interest*" v-model="interest" required></v-text-field>
+                <v-text-field
+                  label="Loan Interest*"
+                  v-model="interest"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Loan period*" v-model="period" required></v-text-field>
+                <v-text-field
+                  label="Loan period*"
+                  v-model="period"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -123,7 +160,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="updateLoan" :loading="updateLoanLoading">Edit</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="updateLoan"
+            :loading="updateLoanLoading"
+            >Edit</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -136,7 +179,11 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field label="Loan amount*" v-model="amount" required></v-text-field>
+                <v-text-field
+                  label="Loan amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -145,43 +192,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="payLoan" :loading="payLoanLoading">PAY</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="deleteDialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <h5>Delete Loan</h5>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="member"
-                  :items="getMembersNames"
-                  dense
-                  label="Choose member"
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Loan amount*" v-model="amount" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Loan Interest*" v-model="interest" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Loan period*" v-model="period" required></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteDialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="deleteLoan" :loading="deleteLoanLoading">Delete</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="payLoan"
+            :loading="payLoanLoading"
+            >PAY</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -275,15 +292,6 @@ export default {
       let loan = this.$store.getters.getLoanById(id);
       this.member = loan.member;
       this.amount = loan.amount;
-      this.interest = loan.interest;
-      this.period = loan.payment_period;
-      this.id = id;
-    },
-    launchDelete(id) {
-      this.deleteDialog = true;
-      let loan = this.$store.getters.getLoanById(id);
-      this.member = loan.member;
-      this.amount = loan.amount_remaining;
       this.interest = loan.interest;
       this.period = loan.payment_period;
       this.id = id;
@@ -401,36 +409,38 @@ export default {
           console.log(err);
         });
     },
-    deleteLoan() {
-      let member = this.$store.getters.getMemberByName(this.member);
-
-      let data = {
-        memberId: member.id,
-        amount: this.amount_remaining,
-        payment_period: this.period,
-        id: this.id
-      };
-      this.$store
-        .dispatch("deleteLoan", data)
-        .then(() => {
-          if (this.deleteLoanStatus) {
-            this.deleteDialog = false;
-            this.setNull();
-            this.$store.dispatch("fetchLoans");
-            Toast.fire({
-              icon: "success",
-              title: "Loan suceessfully deleted"
+    deleteLoan(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, activate it!"
+      }).then(result => {
+        if (result.value) {
+          this.$store
+            .dispatch("deleteLoan", id)
+            .then(() => {
+              if (this.deleteLoanStatus) {
+                this.$store.dispatch("fetchLoans");
+                Toast.fire({
+                  icon: "success",
+                  title: "Loan suceessfully deleted"
+                });
+              } else {
+                Toast.fire({
+                  icon: "error",
+                  title: "Form validation failed"
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
             });
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Form validation failed"
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        }
+      });
     }
   },
   beforeCreate() {

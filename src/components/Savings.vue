@@ -7,8 +7,57 @@
         </template>
       </v-breadcrumbs>
     </v-row>
+    <v-row>
+      <v-col cols="12" md="4">
+        <v-alert
+          class="text-center"
+          border="left"
+          colored-border
+          color="deep-purple accent-4"
+          elevation="2"
+        >
+          <h2>Total Investment</h2>
+          <div>
+            <pulse-loader :loading="investments_countLoading"></pulse-loader>
+            <p v-if="!investments_countLoading">
+              {{ investments_count }} Accounts
+            </p>
+          </div>
+        </v-alert>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-alert
+          class="text-center"
+          border="left"
+          colored-border
+          color="green darken-4"
+          elevation="2"
+        >
+          <h2>Total Fixed</h2>
+          <pulse-loader :loading="fixed_countLoading"></pulse-loader>
+          <p v-if="!fixed_countLoading">{{ fixed_count }} Accounts</p>
+        </v-alert>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-alert
+          class="text-center"
+          border="left"
+          colored-border
+          color="red darken-1"
+          elevation="2"
+        >
+          <h2>Total Ordinary</h2>
+          <pulse-loader :loading="ordinary_countLoading"></pulse-loader>
+          <p v-if="!ordinary_countLoading">{{ ordinary_count }} Accounts</p>
+        </v-alert>
+      </v-col>
+    </v-row>
     <v-layout flex align-end justify-end style="padding-bottom:10px">
-      <v-btn @click.stop="dialog = true" color="success" style="text-transform:capitalize">
+      <v-btn
+        @click.stop="dialog = true"
+        color="success"
+        style="text-transform:capitalize"
+      >
         add saving Account
         <v-icon style="margin-left:3px">mdi-plus</v-icon>
       </v-btn>
@@ -49,9 +98,15 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon color="green" @click="launchEdit(item.id)">mdi-launch</v-icon>
-          <v-icon color="green" @click="launchCredit(item.id)">mdi-cash-plus</v-icon>
-          <v-icon color="green" @click="launchDebit(item.id)">mdi-cash-minus</v-icon>
-          <v-icon color="red" @click="launchDelete(item.id)">mdi-trash-can-outline</v-icon>
+          <v-icon color="green" @click="launchCredit(item.id)"
+            >mdi-cash-plus</v-icon
+          >
+          <v-icon color="green" @click="launchDebit(item.id)"
+            >mdi-cash-minus</v-icon
+          >
+          <v-icon color="red" @click="deleteSaving(item.id)"
+            >mdi-trash-can-outline</v-icon
+          >
         </template>
       </v-data-table>
     </v-card>
@@ -81,7 +136,12 @@
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Saving amount*" v-model="amount" :rules="amountRules" required></v-text-field>
+                <v-text-field
+                  label="Saving amount*"
+                  v-model="amount"
+                  :rules="amountRules"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
@@ -89,14 +149,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false"
+            >Close</v-btn
+          >
           <v-btn
             color="blue darken-1"
             text
             :disabled="!valid"
             @click="postSaving"
             :loading="postSavingLoading"
-          >Save</v-btn>
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -125,7 +188,11 @@
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Saving amount*" v-model="amount" required></v-text-field>
+                <v-text-field
+                  label="Saving amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
@@ -140,51 +207,8 @@
             text
             @click="updateSaving"
             :loading="updateSavingLoading"
-          >Edit</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="deleteDialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <h5>Delete Saving Account</h5>
-        </v-card-title>
-        <v-card-text>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row>
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="member"
-                  :items="getMembersNames"
-                  dense
-                  label="Choose member"
-                ></v-autocomplete>
-              </v-col>
-              <v-col class="d-flex" cols="12">
-                <v-autocomplete
-                  label="Select Account Type"
-                  :items="types"
-                  v-model="type"
-                  :rules="typeRules"
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Saving amount*" v-model="amount" required></v-text-field>
-              </v-col>
-            </v-row>
-          </v-form>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteDialog = false">Close</v-btn>
-          <v-btn
-            :disabled="!valid"
-            color="blue darken-1"
-            text
-            @click="deleteSaving"
-            :loading="deleteSavingLoading"
-          >Delete</v-btn>
+            >Edit</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -197,7 +221,11 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field label="Saving amount*" v-model="amount" required></v-text-field>
+                <v-text-field
+                  label="Saving amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -211,7 +239,8 @@
             text
             @click="creditAccount"
             :loading="postSavingLoading"
-          >Credit</v-btn>
+            >Credit</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -224,7 +253,11 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field label="Saving amount*" v-model="amount" required></v-text-field>
+                <v-text-field
+                  label="Saving amount*"
+                  v-model="amount"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -233,7 +266,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="setNull">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="debitSaving" :loading="debitSavingLoading">Debit</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="debitSaving"
+            :loading="debitSavingLoading"
+            >Debit</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -242,6 +281,7 @@
 
 <script>
 import Swal from "sweetalert2";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -255,6 +295,9 @@ const Toast = Swal.mixin({
 });
 import { mapState, mapGetters } from "vuex";
 export default {
+  components: {
+    PulseLoader
+  },
   data() {
     return {
       valid: false,
@@ -321,14 +364,6 @@ export default {
     },
     launchEdit(id) {
       this.editDialog = true;
-      let saving = this.$store.getters.getSavingById(id);
-      this.member = saving.member;
-      this.amount = saving.amount;
-      this.type = saving.account_type;
-      this.id = id;
-    },
-    launchDelete(id) {
-      this.deleteDialog = true;
       let saving = this.$store.getters.getSavingById(id);
       this.member = saving.member;
       this.amount = saving.amount;
@@ -487,41 +522,46 @@ export default {
           console.log(err);
         });
     },
-    deleteSaving() {
-      let member = this.$store.getters.getMemberByName(this.member);
-
-      let data = {
-        memberId: member.id,
-        amount: this.amount,
-        account_type: this.type,
-        id: this.id
-      };
-      this.$store
-        .dispatch("deleteSaving", data)
-        .then(() => {
-          if (this.deleteSavingStatus) {
-            this.deleteDialog = false;
-            this.setNull();
-            this.$store.dispatch("fetchSavings");
-            Toast.fire({
-              icon: "success",
-              title: "Saving sucessfully deleted"
+    deleteSaving(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, activate it!"
+      }).then(result => {
+        if (result.value) {
+          this.$store
+            .dispatch("deleteSaving",id)
+            .then(() => {
+              if (this.deleteSavingStatus) {
+                this.$store.dispatch("fetchSavings");
+                Toast.fire({
+                  icon: "success",
+                  title: "Saving sucessfully deleted"
+                });
+              } else {
+                Toast.fire({
+                  icon: "error",
+                  title: "Form validation failed"
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
             });
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Form validation failed"
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        }
+      });
     }
   },
   beforeCreate() {
     this.$store.dispatch("fetchMembers");
     this.$store.dispatch("fetchSavings");
+    this.$store.dispatch("fetchInvestmentsCount");
+    this.$store.dispatch("fetchFixedCount");
+    this.$store.dispatch("fetchOrdinaryCount");
   },
   computed: {
     ...mapState([
@@ -534,7 +574,16 @@ export default {
       "updateSavingStatus",
       "updateSavingLoading",
       "deleteSavingStatus",
-      "deleteSavingLoading"
+      "deleteSavingLoading",
+      "investments_count",
+      "investments_countLoading",
+      "fetchInvestments_countError",
+      "fixed_count",
+      "fixed_countLoading",
+      "fetchFixed_countError",
+      "ordinary_count",
+      "ordinary_countLoading",
+      "fetchOrdinary_countError"
     ]),
     ...mapGetters(["getMembersNames"])
   }
