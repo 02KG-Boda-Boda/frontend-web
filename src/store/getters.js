@@ -1,4 +1,4 @@
-// import moment from "moment";
+import moment from "moment";
 
 export const getters = {
   isAuthenticated: state => !!state.token,
@@ -32,8 +32,8 @@ export const getters = {
   },
   dates(state) {
     return state.savings_trend.map(count => {
-      // return moment(count.Date).format("MMMM Do YYYY");
-      return count.Date;
+      return moment(count.Date).format("MMMM");
+      // return count.Date;
     });
   }
 };
