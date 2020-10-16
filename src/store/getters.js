@@ -32,7 +32,8 @@ export const getters = {
   },
   dates(state) {
     return state.savings_trend.map(count => {
-      return moment(count.Date).format("MMMM Do YYYY");
+      // return moment(count.Date).format("MMMM Do YYYY");
+      return count.Date;
     });
   }
 };
